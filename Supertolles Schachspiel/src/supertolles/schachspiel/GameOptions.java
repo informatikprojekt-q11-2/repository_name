@@ -5,10 +5,25 @@
  */
 package supertolles.schachspiel;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author natanael.hoza
  */
 public class GameOptions {
+    JFrame window;
+    GameOverlay game;
     
+    
+    public GameOptions(){
+        game = new GameOverlay(0, 8);
+        
+        window = new JFrame();
+        window.setBounds(0, 0, 1000, 1000);
+        window.setContentPane(game);
+        window.setVisible(true);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+    }
 }

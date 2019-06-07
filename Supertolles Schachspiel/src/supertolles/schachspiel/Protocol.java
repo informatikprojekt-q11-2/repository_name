@@ -10,5 +10,5 @@ package supertolles.schachspiel;
  * @author natanael.hoza
  */
 public class Protocol {
-    
+    //TO DO:  JScrollPane und JList hier einfuegen anstatt in GameOerlay
 }

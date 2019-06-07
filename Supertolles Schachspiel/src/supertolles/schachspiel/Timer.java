@@ -10,5 +10,5 @@ package supertolles.schachspiel;
  * @author natanael.hoza
  */
 public class Timer {
-    
+    //TO DO:  JLabels timeWhite und timeBlack hier einfuegen anstatt in GameOverlay
 }
