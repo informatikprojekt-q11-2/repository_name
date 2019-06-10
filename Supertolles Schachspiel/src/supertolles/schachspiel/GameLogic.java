@@ -13,7 +13,7 @@ public class GameLogic {
     
     Piece[][] board;
     GameOverlay game;
-    int boardlength;
+    final int boardlength;
     
     public GameLogic(GameOverlay g, int boardl){
         boardlength = boardl;
@@ -69,4 +69,32 @@ public class GameLogic {
             System.out.println("");
         }
     }
+    
+    void flipBoard(){
+        //TODO Methode implementieren 
+    }
+    
+    void movePiece(int[] currentCoordinate, int x, int y){
+        //TODO Methode implementieren  
+    }
+    
+    void checkWinConditions(){
+        //TODO Methode implementieren    
+    }
+    
+    boolean isCheckMate(){
+        //TODO Methode implementieren
+        return false;
+    }
+    
+    boolean isCheck(){
+        //TODO Methode implementieren    
+        return false;
+    }
+    
+    boolean isStaleMate(){
+        //TODO Methode implementieren    
+        return false;
+    }
+    
 }

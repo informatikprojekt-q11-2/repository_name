@@ -47,7 +47,7 @@ public class GameOverlay extends JPanel{
         setLayout(null);
         
         logic = new GameLogic(this, boardLength);
-        //timer = new Timer(logic, timeInMs);
+        timer = new Timer(logic, this, timeInMs);
         playingField = new JPanel(null);
         playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
         
