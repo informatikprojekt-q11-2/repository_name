@@ -26,27 +26,27 @@ public class GameLogic {
     
     public void startPosition(){
         board[0][0] = new Piece(0, 0, "black", "Rook");
-        board[boardlength-1][0] = new Piece(0, boardlength-1, "black", "Rook");
-        board[1][0] = new Piece(0, 1, "black", "Knight");
-        board[boardlength-2][0] = new Piece(0, boardlength-2, "black", "Knight");
-        board[2][0] = new Piece(0, 2, "black", "Bishop");
-        board[boardlength-3][0] = new Piece(0, boardlength-3, "black", "Bishop");
-        board[3][0] = new Piece(0, 3, "black", "Queen");
-        board[4][0] = new Piece(0, 4, "black", "King");
+        board[0][boardlength-1] = new Piece(boardlength-1, 0, "black", "Rook");
+        board[0][1] = new Piece(1, 0, "black", "Knight");
+        board[0][boardlength-2] = new Piece(boardlength-2, 0, "black", "Knight");
+        board[0][2] = new Piece(2, 0, "black", "Bishop");
+        board[0][boardlength-3] = new Piece(boardlength-3, 0, "black", "Bishop");
+        board[0][3] = new Piece(3, 0, "black", "Queen");
+        board[0][4] = new Piece(4, 0, "black", "King");
         for (int i = 0; i < boardlength; i++) {
-            board[i][1] = new Piece(1, i, "black", "Pawn");
+            board[1][i] = new Piece(i, 1, "black", "Pawn");
         }
         
-        board[0][boardlength-1] = new Piece(boardlength-1, 0, "white", "Rook");
+        board[boardlength-1][0] = new Piece(0, boardlength-1, "white", "Rook");
         board[boardlength-1][boardlength-1] = new Piece(boardlength-1, boardlength-1, "white", "Rook");
-        board[1][boardlength-1] = new Piece(boardlength-1, 1, "white", "Knight");
-        board[boardlength-2][boardlength-1] = new Piece(boardlength-1, boardlength-2, "white", "Knight");
-        board[2][boardlength-1] = new Piece(boardlength-1, 2, "white", "Bishop");
-        board[boardlength-3][boardlength-1] = new Piece(boardlength-1, boardlength-3, "white", "Bishop");
-        board[3][boardlength-1] = new Piece(boardlength-1, 3, "white", "Queen");
-        board[4][boardlength-1] = new Piece(boardlength-1, 4, "white", "King");
+        board[boardlength-1][1] = new Piece(1, boardlength-1, "white", "Knight");
+        board[boardlength-1][boardlength-2] = new Piece(boardlength-2, boardlength-1, "white", "Knight");
+        board[boardlength-1][2] = new Piece(2, boardlength-1, "white", "Bishop");
+        board[boardlength-1][boardlength-3] = new Piece(boardlength-3, boardlength-1, "white", "Bishop");
+        board[boardlength-1][3] = new Piece(3, boardlength-1, "white", "Queen");
+        board[boardlength-1][4] = new Piece(4, boardlength-1, "white", "King");
         for (int i = 0; i < boardlength; i++) {
-            board[i][boardlength-2] = new Piece(boardlength-2, i, "white", "Pawn");
+            board[boardlength-2][i] = new Piece(i, boardlength-2, "white", "Pawn");
         }   
     }
     
@@ -72,12 +72,12 @@ public class GameLogic {
     
     void flipBoard(){
         Piece[][] newBoard = new Piece[boardlength][boardlength];
-        for(int x = 0 ; x < boardlength ; x++){
-            for(int y = 0 ; y < boardlength ; y++){
-                if(board[x][y] != null){
-                    board[x][y].setCoordinates(x, boardlength-y-1);
-                    //System.out.println(board[x][y].getType()+" "+board[x][y].getColour()+" "+ board[x][y].getX()+ " "+ board[x][y].getY());
-                    newBoard[board[x][y].getX()][board[x][y].getY()] = board[x][y];
+        for(int y = 0 ; y < boardlength ; y++){
+            for(int x = 0 ; x < boardlength ; x++){
+                if(board[y][x] != null){
+                    board[y][x].setCoordinates(x, boardlength-y-1);
+                    //System.out.println(board[y][x].getType()+" "+board[y][x].getColour()+" "+ board[y][x].getX()+ " "+ board[y][x].getY());
+                    newBoard[board[y][x].getY()][board[y][x].getX()] = board[y][x];
                 }
             }
         }
