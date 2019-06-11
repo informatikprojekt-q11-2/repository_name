@@ -22,6 +22,7 @@ public class GameLogic {
         
         startPosition();
         printBoard();
+        flipBoard();
     }
     
     public void startPosition(){
@@ -71,11 +72,23 @@ public class GameLogic {
     }
     
     void flipBoard(){
-        //TODO Methode implementieren 
+        Piece[][] newBoard = new Piece[boardlength][boardlength];
+        for(int x = 0 ; x < boardlength ; x++){
+            for(int y = 0 ; y < boardlength ; y++){
+                if(board[x][y] != null){
+                    board[x][y].setCoordinates(x, boardlength-y-1);
+                    //System.out.println(board[x][y].getType()+" "+board[x][y].getColour()+" "+ board[x][y].getX()+ " "+ board[x][y].getY());
+                    newBoard[board[x][y].getX()][board[x][y].getY()] = board[x][y];
+                }
+            }
+        }
+        board = newBoard;
+        
     }
     
     void movePiece(int[] currentCoordinate, int x, int y){
-        //TODO Methode implementieren  
+        board[x][y] = board[currentCoordinate[0]][currentCoordinate[1]];
+        board[currentCoordinate[0]][currentCoordinate[1]] = null;
     }
     
     void checkWinConditions(){

@@ -18,15 +18,16 @@ public class Timer extends StopWatch{
     private JLabel timeWhite, timeBlack, playingTime;
     private java.util.Timer refreshTimer;
     private TimerTask refreshTask;
-    private int timeInMs;
+    private int timeInSec;
+    private int timeRemainingWhite, timeRemainingBlack;
     private GameLogic logic;
     
-    public Timer(GameLogic logic, GameOverlay overlay, int timeInMs){
+    public Timer(GameLogic logic, GameOverlay overlay, int timeInSec){
         refreshTimer = new java.util.Timer();
-        if(timeInMs > 0){
+        if(timeInSec > 0){
             //TODO  JLabels timeWhite und timeBlack hier einfuegen anstatt in GameOverlay
             this.logic = logic;
-            this.timeInMs = timeInMs;
+            this.timeInSec = timeRemainingWhite = timeRemainingBlack = timeInSec;
             
             limitedClock();
         }else{
