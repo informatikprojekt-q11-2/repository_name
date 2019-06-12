@@ -5,6 +5,8 @@
  */
 package supertolles.schachspiel;
 
+import supertolles.schachspiel.test.Test_SearchPieces;
+
 /**
  *
  * @author natanael.hoza
@@ -16,6 +18,9 @@ public class main {
      */
     public static void main(String[] args) {
         new GameOptions();
+        
+        //Aufruf von Testklasse
+        //new Test_SearchPieces();
     }
     
 }
