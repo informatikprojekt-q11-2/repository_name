@@ -7,7 +7,7 @@ package supertolles.schachspiel;
 
 /**
  *
- * @author natanael.hoza
+ * @author Alexander
  */
 public class Piece {
     String type,colour;

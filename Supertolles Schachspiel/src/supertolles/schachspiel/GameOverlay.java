@@ -95,6 +95,16 @@ public class GameOverlay extends JPanel{
         currentMoveOptions.add(new Integer[]{6,5,1});
     }
     
+    
+    /**
+     * @author Alexander
+     * 
+     *  depending on the current gamestate the method either initiates the computing of the moveoptions of the piece on the clicked field
+     *  or it initiates the moving of the figure
+     * 
+     * @param x: x-Coordinate of the clicked button
+     * @param y: y-Coordinate of the clicked button 
+     */
     public void clicked(int x, int y){
         boolean isMoveOption = false;
         
@@ -125,14 +135,14 @@ public class GameOverlay extends JPanel{
         }
         if(!isMoveOption){
             if(logic.board[y][x] != null){
-                if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.board[y][x].getColour() == "white") || 
-                   ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.board[y][x].getColour() == "black")){
+                if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_WHITE) || 
+                   ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_BLACK)){
                     //currentMoveOptions = logic.computeMoveOptions(x,y);
                     clickedX = x;
                     clickedY = y;
 
                     for(int i = 0; i<currentMoveOptions.size();i++){
-                        if(currentMoveOptions.get(i)[2] == 0){
+                        if(currentMoveOptions.get(i)[2] == Constants.FALSE){
                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.blue);
                         }
                         else{

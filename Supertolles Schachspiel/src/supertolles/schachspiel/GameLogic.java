@@ -27,28 +27,28 @@ public class GameLogic {
     }
     
     public void startPosition(){
-        board[0][0] = new Piece(0, 0, "black", Constants.ROOK);
-        board[0][boardlength-1] = new Piece(boardlength-1, 0, "black", Constants.ROOK);
-        board[0][1] = new Piece(1, 0, "black", Constants.KNIGHT);
-        board[0][boardlength-2] = new Piece(boardlength-2, 0, "black", Constants.KNIGHT);
-        board[0][2] = new Piece(2, 0, "black", Constants.BISHOP);
-        board[0][boardlength-3] = new Piece(boardlength-3, 0, "black", Constants.BISHOP);
-        board[0][3] = new Piece(3, 0, "black", Constants.QUEEN);
-        board[0][4] = new Piece(4, 0, "black", Constants.KING);
+        board[0][0] = new Piece(0, 0, Constants.Color_BLACK, Constants.ROOK);
+        board[0][boardlength-1] = new Piece(boardlength-1, 0, Constants.Color_BLACK, Constants.ROOK);
+        board[0][1] = new Piece(1, 0, Constants.Color_BLACK, Constants.KNIGHT);
+        board[0][boardlength-2] = new Piece(boardlength-2, 0, Constants.Color_BLACK, Constants.KNIGHT);
+        board[0][2] = new Piece(2, 0, Constants.Color_BLACK, Constants.BISHOP);
+        board[0][boardlength-3] = new Piece(boardlength-3, 0, Constants.Color_BLACK, Constants.BISHOP);
+        board[0][3] = new Piece(3, 0, Constants.Color_BLACK, Constants.QUEEN);
+        board[0][4] = new Piece(4, 0, Constants.Color_BLACK, Constants.KING);
         for (int i = 0; i < boardlength; i++) {
-            board[1][i] = new Piece(i, 1, "black", Constants.PAWN);
+            board[1][i] = new Piece(i, 1, Constants.Color_BLACK, Constants.PAWN);
         }
         
-        board[boardlength-1][0] = new Piece(0, boardlength-1, "white", Constants.ROOK);
-        board[boardlength-1][boardlength-1] = new Piece(boardlength-1, boardlength-1, "white", Constants.ROOK);
-        board[boardlength-1][1] = new Piece(1, boardlength-1, "white", Constants.KNIGHT);
-        board[boardlength-1][boardlength-2] = new Piece(boardlength-2, boardlength-1, "white", Constants.KNIGHT);
-        board[boardlength-1][2] = new Piece(2, boardlength-1, "white", Constants.BISHOP);
-        board[boardlength-1][boardlength-3] = new Piece(boardlength-3, boardlength-1, "white", Constants.BISHOP);
-        board[boardlength-1][3] = new Piece(3, boardlength-1, "white", Constants.QUEEN);
-        board[boardlength-1][4] = new Piece(4, boardlength-1, "white", Constants.KING);
+        board[boardlength-1][0] = new Piece(0, boardlength-1, Constants.Color_WHITE, Constants.ROOK);
+        board[boardlength-1][boardlength-1] = new Piece(boardlength-1, boardlength-1, Constants.Color_WHITE, Constants.ROOK);
+        board[boardlength-1][1] = new Piece(1, boardlength-1, Constants.Color_WHITE, Constants.KNIGHT);
+        board[boardlength-1][boardlength-2] = new Piece(boardlength-2, boardlength-1, Constants.Color_WHITE, Constants.KNIGHT);
+        board[boardlength-1][2] = new Piece(2, boardlength-1, Constants.Color_WHITE, Constants.BISHOP);
+        board[boardlength-1][boardlength-3] = new Piece(boardlength-3, boardlength-1, Constants.Color_WHITE, Constants.BISHOP);
+        board[boardlength-1][3] = new Piece(3, boardlength-1, Constants.Color_WHITE, Constants.QUEEN);
+        board[boardlength-1][4] = new Piece(4, boardlength-1, Constants.Color_WHITE, Constants.KING);
         for (int i = 0; i < boardlength; i++) {
-            board[boardlength-2][i] = new Piece(i, boardlength-2, "white", Constants.PAWN);
+            board[boardlength-2][i] = new Piece(i, boardlength-2, Constants.Color_WHITE, Constants.PAWN);
         }   
     }
     
@@ -228,5 +228,241 @@ public class GameLogic {
             temp[i]=arrayList.get(i);
         }
         return temp;
+    }
+    
+    
+    public ArrayList<Integer[]> computeMoveOptions(int x, int y){
+        ArrayList<Integer[]> generalMovement = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> finalMovement = new ArrayList<Integer[]>();
+        boolean[][] checkRestrictions = new boolean[boardlength][boardlength];
+        boolean[][] pinRestrictions = new boolean[boardlength][boardlength];
+        
+        if(board[y][x] == null){
+            return null;
+        }else{
+            if((game.gamestate == Constants.BLACK_TO_MOVE || game.gamestate == Constants.BLACK_TO_SELECT) && board[y][x].getColour().equals(Constants.Color_WHITE)||
+               (game.gamestate == Constants.WHITE_TO_MOVE || game.gamestate == Constants.WHITE_TO_SELECT) && board[y][x].getColour().equals(Constants.Color_BLACK)){
+                return null;
+            }else{
+                if(searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]).length > 1){
+                    if(board[y][x].getType() == Constants.KING){
+                        //return computeKingMovement(x,y);
+                    }else{
+                        return null;
+                    }    
+                }else{
+                    if(searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]).length == 0){
+                        for (int i = 0; i < boardlength; i++){
+                            for (int j = 0; j < boardlength; j++){
+                                checkRestrictions[i][j] = true;
+                            }
+                        }
+                    }else{
+                        checkRestrictions = computeCheckRestrictions(searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1])[0]);
+                    }
+                }
+                
+                pinRestrictions = computePinRestrictions(x,y);
+                
+                switch(board[y][x].getType()){
+                    
+                    case Constants.PAWN:    generalMovement = computePawnMovement(x,y);
+                                            for (int i = 0; i < generalMovement.size(); i++) {
+                                                if(pinRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]] && checkRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]]){
+                                                    finalMovement.add(generalMovement.get(i));
+                                                }
+                                            }
+                                            break;
+                                            
+                    case Constants.KNIGHT:  generalMovement = computeKnightMovement(x,y);
+                                            for (int i = 0; i < generalMovement.size(); i++) {
+                                                if(pinRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]] && checkRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]]){
+                                                    finalMovement.add(generalMovement.get(i));
+                                                }
+                                            }
+                                            break;
+                                            
+                    case Constants.ROOK:    generalMovement = computeStraightMovement(x,y);
+                                            for (int i = 0; i < generalMovement.size(); i++) {
+                                                if(pinRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]] && checkRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]]){
+                                                    finalMovement.add(generalMovement.get(i));
+                                                }
+                                            }
+                                            break;
+                                            
+                    case Constants.BISHOP:  generalMovement = computeDiagonalMovement(x,y);
+                                            for (int i = 0; i < generalMovement.size(); i++) {
+                                                if(pinRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]] && checkRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]]){
+                                                    finalMovement.add(generalMovement.get(i));
+                                                }
+                                            }
+                                            break;
+                                            
+                    case Constants.QUEEN:   generalMovement = computeStraightMovement(x,y);
+                                            ArrayList<Integer[]> movement = computeDiagonalMovement(x,y);
+                                            for (int i = 0; i < movement.size(); i++){
+                                                generalMovement.add(movement.get(i));
+                                            }
+                                            for (int i = 0; i < generalMovement.size(); i++) {
+                                                if(pinRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]] && checkRestrictions[generalMovement.get(i)[1]][generalMovement.get(i)[0]]){
+                                                    finalMovement.add(generalMovement.get(i));
+                                                }
+                                            }
+                                            break;
+                                            
+                    case Constants.KING:    finalMovement = computeKingMovement(x,y);
+                                            break;
+                }
+            }
+        }
+        
+        return finalMovement;
+    }
+    
+    public boolean[][] computeCheckRestrictions(Piece p){
+        //TODO Methode einfuegen
+        return null;
+    }
+    
+    public boolean[][] computePinRestrictions(int x, int y){
+        //TODO Methode einfuegen
+        return null;
+    }
+    
+    public ArrayList<Integer[]> computePawnMovement(int x, int y){
+        ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
+        if(isInBounds(x, y-1)){
+            if(board[y-1][x] == null){
+                moveOptions.add(new Integer[]{x, y-1, 0});
+            }
+        }
+        if(isInBounds(x+1, y-1)){
+            if(board[y-1][x+1] != null && board[y-1][x+1].getColour() != board[y][x].getColour()){
+                moveOptions.add(new Integer[]{x+1, y-1, 1});
+            }
+        }
+        if(isInBounds(x-1, y-1)){
+            if(board[y-1][x-1] != null && board[y-1][x-1].getColour() != board[y][x].getColour()){
+                moveOptions.add(new Integer[]{x-1, y-1, 1});
+            }
+        }
+        
+        return moveOptions;
+    }
+    
+    public ArrayList<Integer[]> computeKnightMovement(int x, int y){
+        ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
+        if(isInBounds(x+2, y+1)){
+            if(board[y+1][x+2] == null){
+                moveOptions.add(new Integer[]{x+2, y+1, 0});
+            }else{
+                if(board[y+1][x+2].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x+2, y+1, 1});
+                }
+            }
+        }
+        if(isInBounds(x+2, y-1)){
+            if(board[y-1][x+2] == null){
+                moveOptions.add(new Integer[]{x+2, y-1, 0});
+            }else{
+                if(board[y-1][x+2].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x+2, y-1, 1});
+                }
+            }
+        }
+        if(isInBounds(x+1, y-2)){
+            if(board[y-2][x+1] == null){
+                moveOptions.add(new Integer[]{x+1, y-2, 0});
+            }else{
+                if(board[y-2][x+1].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x+1, y-2, 1});
+                }
+            }
+        }
+        if(isInBounds(x-1, y-2)){
+            if(board[y-2][x-1] == null){
+                moveOptions.add(new Integer[]{x-1, y-2, 0});
+            }else{
+                if(board[y-2][x-1].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x-1, y-2, 1});
+                }
+            }
+        }
+        if(isInBounds(x-2, y-1)){
+            if(board[y-1][x-2] == null){
+                moveOptions.add(new Integer[]{x-2, y-1, 0});
+            }else{
+                if(board[y-1][x-2].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x-2, y-1, 1});
+                }
+            }
+        }
+        if(isInBounds(x-2, y+1)){
+            if(board[y+1][x-2] == null){
+                moveOptions.add(new Integer[]{x-2, y+1, 0});
+            }else{
+                if(board[y+1][x-2].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x-2, y+1, 1});
+                }
+            }
+        }
+        if(isInBounds(x-1, y+2)){
+            if(board[y+2][x-1] == null){
+                moveOptions.add(new Integer[]{x-1, y+2, 0});
+            }else{
+                if(board[y+2][x-1].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x-1, y+2, 1});
+                }
+            }
+        }
+        if(isInBounds(x+1, y+2)){
+            if(board[y+2][x+1] == null){
+                moveOptions.add(new Integer[]{x+1, y+2, 0});
+            }else{
+                if(board[y+2][x+1].getColour() != board[y][x].getColour()){
+                    moveOptions.add(new Integer[]{x+1, y+2, 1});
+                }
+            }
+        }
+        
+        return moveOptions;
+    }
+    
+    public ArrayList<Integer[]> computeKingMovement(int x, int y){
+        //TODO Methode einfuegen
+        return null;
+    }
+    
+    public ArrayList<Integer[]> computeStraightMovement(int x, int y){
+        //TODO Methode einfuegen
+        return null;
+    }
+    
+    public ArrayList<Integer[]> computeDiagonalMovement(int x, int y){
+        //TODO Methode einfuegen
+        return null;
+    }
+    
+    public int[] getKingCoordinatesCurrentTurn(){
+        for(int i = 0; i < boardlength; i++){
+            for (int j = 0; j < board.length; j++) {
+                if(board[i][j] != null && board[i][j].getType() == Constants.KING){
+                    if(((game.gamestate == Constants.BLACK_TO_MOVE || game.gamestate == Constants.BLACK_TO_SELECT) && board[i][j].getColour() == Constants.Color_BLACK)||
+                        ((game.gamestate == Constants.WHITE_TO_MOVE || game.gamestate == Constants.WHITE_TO_SELECT) && board[i][j].getColour() == Constants.Color_WHITE)){
+                            return new int[]{board[i][j].getX(), board[i][j].getY()};
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    public GameLogic() {
+        this.boardlength = 0;
+    }
+    
+    public boolean isInBounds(int x, int y){
+        return (0 <= x && x < boardlength && 0 <= y && y < boardlength);
     }
 }
