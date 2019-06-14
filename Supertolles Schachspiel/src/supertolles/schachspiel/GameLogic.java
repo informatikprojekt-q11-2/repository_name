@@ -319,14 +319,69 @@ public class GameLogic {
         return finalMovement;
     }
     
-    public boolean[][] computeCheckRestrictions(Piece p){
-        //TODO Methode einfuegen
-        return null;
+    public boolean[][] computeCheckRestrictions(Piece threat){
+        int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
+        int x = threat.getX(), y = threat.getY();
+        boolean[][] possibleMovement = new boolean[boardlength][boardlength];
+        int xDirection = (int) Math.signum(y-yk), yDirection = (int) Math.signum(x-xk);
+        
+        if(threat.getType() != Constants.KNIGHT && threat.getType() != Constants.PAWN){
+            for (int i = 1; Math.abs(i*xDirection) <= Math.abs(x-xk) && Math.abs(i*yDirection) <= Math.abs(y-yk); i++) {
+                possibleMovement[yk + (i*yDirection)][xk + (i*xDirection)] = true;
+            }
+        }
+        possibleMovement[y][x] = true;
+        
+        return possibleMovement;
     }
     
     public boolean[][] computePinRestrictions(int x, int y){
-        //TODO Methode einfuegen
-        return null;
+        int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
+        boolean[][] possibleMovement = new boolean[boardlength][boardlength];
+        int xDirection = (int) Math.signum(y-yk), yDirection = (int) Math.signum(x-xk);
+        boolean pin = true;
+        ArrayList<Integer[]> pinRestrictions = new ArrayList<Integer[]>();
+        
+        if(xDirection != 0 || yDirection != 0){
+            if(Math.abs(x-xk) == Math.abs(y-yk) || x==xk || y==yk){
+                for (int i = 1; i < Math.abs(x-xk) || i < Math.abs(y-yk); i++) {
+                    if(board[yk+(i*yDirection)][xk+(i*xDirection)] != null){
+                        pin = false;
+                    }
+                }
+                if(pin){
+                    for(int i = 1; isInBounds(x+(i*xDirection), y+(i*yDirection)) && board[y+(i*yDirection)][x+(i*xDirection)] == null; i++){
+                        pinRestrictions.add(new Integer[]{x+(i*xDirection), y+(i*yDirection)});
+                    }
+                    
+                    int xPinPiece = x+((pinRestrictions.size()+1)*xDirection);
+                    int yPinPiece = y+((pinRestrictions.size()+1)*yDirection);
+                    
+                    if(((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
+                       (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
+                       (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN)){
+                            pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
+                            for (int i = 0; i < pinRestrictions.size(); i++) {
+                                possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
+                            }
+                    }else{
+                        for (int i = 0; i < boardlength; i++) {
+                            for (int j = 0; j < boardlength; j++) {
+                                possibleMovement[i][j] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            for (int i = 0; i < boardlength; i++) {
+                for (int j = 0; j < boardlength; j++) {
+                    possibleMovement[i][j] = true;
+                }
+            }
+        }
+        
+        return possibleMovement;
     }
     
     public ArrayList<Integer[]> computePawnMovement(int x, int y){
