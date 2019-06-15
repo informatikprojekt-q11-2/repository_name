@@ -230,6 +230,7 @@ public class GameLogic {
         return temp;
     }
     
+    //@author: Alexander
     
     public ArrayList<Integer[]> computeMoveOptions(int x, int y){
         ArrayList<Integer[]> generalMovement = new ArrayList<Integer[]>();
@@ -484,18 +485,166 @@ public class GameLogic {
     }
     
     public ArrayList<Integer[]> computeKingMovement(int x, int y){
-        //TODO Methode einfuegen
-        return null;
+        ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
+        
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if(isInBounds(x+j, y+i)){
+                    if(isCheck(x+j, y+i) == false){
+                        if(board[y+i][x+j] == null){
+                            moveOptions.add(new Integer[]{x+j, y+i, 0});
+                        }else{
+                            if(board[y+i][x+j].getColour() != board[y][x].getColour()){
+                                moveOptions.add(new Integer[]{x+j, y+i, 1});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return moveOptions;
     }
     
     public ArrayList<Integer[]> computeStraightMovement(int x, int y){
-        //TODO Methode einfuegen
-        return null;
+        ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> moveOptionsX = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> moveOptionsY = new ArrayList<Integer[]>();
+        boolean PieceX = false, PieceY = false;
+        
+        for (int i = 0; i < boardlength; i++) {
+            if(i<x){
+                if(board[y][i] != null){
+                    moveOptionsX.clear();
+                    if(board[y][i].getColour() != board[y][x].getColour()){
+                        moveOptionsX.add(new Integer[]{i,y,1});
+                    }
+                }else{
+                    moveOptionsX.add(new Integer[]{i,y,0});
+                }
+            }
+            
+            if(i>x && !PieceX){
+                if(board[y][i] != null){
+                    PieceX = true;
+                    if(board[y][i].getColour() != board[y][x].getColour()){
+                        moveOptionsX.add(new Integer[]{i,y,1});
+                    }
+                }else{
+                    moveOptionsX.add(new Integer[]{i,y,0});
+                }
+            }
+            
+            if(i<y){
+                if(board[i][x] != null){
+                    moveOptionsY.clear();
+                    if(board[i][x].getColour() != board[y][x].getColour()){
+                        moveOptionsY.add(new Integer[]{x,i,1});
+                    }
+                }else{
+                    moveOptionsY.add(new Integer[]{x,i,0});
+                }
+            }
+            
+            if(i>y && !PieceY){
+                if(board[i][x] != null){
+                    PieceY = true;
+                    if(board[i][x].getColour() != board[y][x].getColour()){
+                        moveOptionsY.add(new Integer[]{x,i,1});
+                    }
+                }else{
+                    moveOptionsY.add(new Integer[]{x,i,0});
+                }                
+            }
+        }
+        
+        for (int i = 0; i < moveOptionsX.size(); i++) {
+            moveOptions.add(moveOptionsX.get(i));
+        }
+        for (int i = 0; i < moveOptionsY.size(); i++) {
+            moveOptions.add(moveOptionsY.get(i));
+        }
+        
+        return moveOptions;
     }
     
     public ArrayList<Integer[]> computeDiagonalMovement(int x, int y){
-        //TODO Methode einfuegen
-        return null;
+        ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> movementDownRight = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> movementUpRight = new ArrayList<Integer[]>();
+        boolean PieceDownRight = false, PieceUpRight = false;
+        int xUpLeft, yUpLeft;
+        int xDownLeft, yDownLeft;
+        
+        if(x<y){
+            xUpLeft = 0;
+            yUpLeft = y-x;
+        }else{
+            xUpLeft = x-y;
+            yUpLeft = 0;
+        }
+        if(x<(boardlength-1-y)){
+            xDownLeft = 0;
+            yDownLeft = x+y;
+        }else{
+            xDownLeft = x-(boardlength-1-y);
+            yDownLeft = boardlength-1;
+        }
+        
+        for(int i = 0; i<boardlength; i++){
+            if(xUpLeft+i<x){
+                if(board[yUpLeft+i][xUpLeft+i] != null){
+                    movementDownRight.clear();
+                    if(board[yUpLeft+i][xUpLeft+i].getColour() != board[y][x].getColour()){
+                        movementDownRight.add(new Integer[]{xUpLeft+i, yUpLeft+i, 1});
+                    }
+                }else{
+                    movementDownRight.add(new Integer[]{xUpLeft+i, yUpLeft+i, 0});
+                }
+            }
+            
+            if(xUpLeft+i>x && isInBounds(xUpLeft+i, yUpLeft+i) && !PieceDownRight){
+                if(board[yUpLeft+i][xUpLeft+i] != null){
+                    PieceDownRight = true;
+                    if(board[yUpLeft+i][xUpLeft+i].getColour() != board[y][x].getColour()){
+                        movementDownRight.add(new Integer[]{xUpLeft+i, yUpLeft+i, 1});
+                    }
+                }else{
+                    movementDownRight.add(new Integer[]{xUpLeft+i, yUpLeft+i, 0});
+                }
+            }
+            
+            if(xDownLeft+i<x){
+                if(board[yDownLeft-i][xDownLeft+i] != null){
+                    movementUpRight.clear();
+                    if(board[yDownLeft-i][xDownLeft+i].getColour() != board[y][x].getColour()){
+                        movementUpRight.add(new Integer[]{xDownLeft+i, yDownLeft-i, 1});
+                    }
+                }else{
+                    movementUpRight.add(new Integer[]{xDownLeft+i, yDownLeft-i, 0});
+                }
+            }
+            
+            if(xDownLeft+i>x && isInBounds(xDownLeft+i, yDownLeft-i) && !PieceUpRight){
+                if(board[yDownLeft-i][xDownLeft+i] != null){
+                    PieceUpRight = true;
+                    if(board[yDownLeft-i][xDownLeft+i].getColour() != board[y][x].getColour()){
+                        movementUpRight.add(new Integer[]{xDownLeft+i, yDownLeft-i, 1});
+                    }
+                }else{
+                    movementUpRight.add(new Integer[]{xDownLeft+i, yDownLeft-i, 0});
+                }
+            }
+        }
+        
+        for (int i = 0; i < movementDownRight.size(); i++) {
+            moveOptions.add(movementDownRight.get(i));
+        }
+        for (int i = 0; i < movementUpRight.size();i++) {
+            moveOptions.add(movementUpRight.get(i));
+        }
+        
+        return moveOptions;
     }
     
     public int[] getKingCoordinatesCurrentTurn(){
