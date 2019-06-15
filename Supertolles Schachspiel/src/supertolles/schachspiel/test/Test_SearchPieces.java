@@ -5,8 +5,11 @@
  */
 package supertolles.schachspiel.test;
 
+import java.util.ArrayList;
+
 import supertolles.schachspiel.Constants;
 import supertolles.schachspiel.GameLogic;
+import supertolles.schachspiel.GameOverlay;
 import supertolles.schachspiel.Piece;
 
 /**
@@ -17,13 +20,13 @@ public class Test_SearchPieces extends GameLogic{
     
 
     public Test_SearchPieces(){
-        super(null, 8);
+        super(new GameOverlay(0, 8), 8);
         for(int i = 0; i<8;i++){
             for(int j = 0; j<8;j++){
                 board[i][j] = null;
             }
         }
-        test1();
+        test2();
     }
     
     void test1(){
@@ -44,6 +47,29 @@ public class Test_SearchPieces extends GameLogic{
         for(int i=0; i<threat.length;i++){
             System.out.println(threat[i].getType()+" "+threat[i].getColour()
                     +"  x:"+threat[i].getX()+"  y:"+threat[i].getY());
+        }
+    }
+    
+    void test2(){
+    	board[4][7]= new Piece(7,4, Constants.Color_WHITE, Constants.KING);
+    	board[1][2]= new Piece(2,1, Constants.Color_WHITE, Constants.BISHOP);
+    	board[0][6]= new Piece(6,0, Constants.Color_BLACK, Constants.ROOK);
+    	board[3][0]= new Piece(0,3, Constants.Color_BLACK, Constants.ROOK);
+    	board[5][0]= new Piece(0,5, Constants.Color_BLACK, Constants.ROOK);
+    	board[7][4]= new Piece(4,7, Constants.Color_BLACK, Constants.BISHOP);
+    	
+    	Piece[] threat = searchThreatFigure(7, 4);
+        System.out.println(threat.length);
+        for(int i=0; i<threat.length;i++){
+            System.out.println(threat[i].getType()+" "+threat[i].getColour()
+                    +"  x:"+threat[i].getX()+"  y:"+threat[i].getY());
+        }
+        
+        System.out.println(isCheck(7, 4));
+        System.out.println(isCheckMate());
+        ArrayList<Integer[]> a = computeMoveOptions(2, 1);
+        for(int i=0; i< a.size(); i++){
+        	System.out.println("x:"+a.get(i)[0]+" y:"+a.get(i)[1]);
         }
     }
  

@@ -12,6 +12,7 @@ package supertolles.schachspiel;
 public class Piece {
     String type,colour;
     int x,y;
+   //boolean moved;
     
     public Piece(int X, int Y, String col, String typ){
         type = typ;
@@ -48,4 +49,12 @@ public class Piece {
     public int getY(){
         return y;
     }
+  /*  
+    public boolean hasMoved(){
+    	return moved;
+    }
+    
+    public void setMoved(){
+    	moved = true;
+    }*/
 }

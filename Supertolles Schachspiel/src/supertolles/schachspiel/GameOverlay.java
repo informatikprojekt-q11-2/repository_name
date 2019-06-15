@@ -10,8 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -39,10 +42,12 @@ public class GameOverlay extends JPanel{
     int gamestate, clickedX, clickedY;
     ArrayList<Integer[]> currentMoveOptions;
     ChessButton[][] board;
+    ArrayList<Piece> takenPiecesWhite, takenPiecesBlack;
     
     JPanel piecesWhite, piecesBlack, playingField;
     JButton surrender;
     Timer timer;
+    Protocol protocol;
     
     public GameOverlay(int timeInMs, int boardLength){
         int buttonHeight = 80;
@@ -93,6 +98,10 @@ public class GameOverlay extends JPanel{
         currentMoveOptions.add(new Integer[]{4,5,0});
         currentMoveOptions.add(new Integer[]{5,5,0});
         currentMoveOptions.add(new Integer[]{6,5,1});
+        
+        
+        takenPiecesWhite = new ArrayList<Piece>();
+        takenPiecesBlack = new ArrayList<Piece>();
     }
     
     
@@ -166,5 +175,152 @@ public class GameOverlay extends JPanel{
         else{
             gamestate++;
         }
+    }
+    
+    /**
+     * @author Niklas
+     */
+    //TODO KLASSE PROTOCOL MUSS GEMACHT WERDEN!
+    public void update(){
+/*    	//protocol.protocol() ??
+    	for(int y = 0; y < board.length; y++){
+    		for(int x = 0; x < board.length; x++){
+        		//Irgendetwas mit board[][] machen
+        	}
+    	}
+*/    	
+    	
+    	//0: Pawn, 1: Knight, 2: Bishop, 3: Rook, 4: Queen, 5: King
+    	//int[] takenPieces = new int[6];
+    	HashMap<String, Integer> takenPieces = new HashMap();
+    	takenPieces.put(Constants.PAWN, 0);
+    	takenPieces.put(Constants.KNIGHT, 0);
+    	takenPieces.put(Constants.BISHOP, 0);
+    	takenPieces.put(Constants.ROOK, 0);
+    	takenPieces.put(Constants.QUEEN, 0);
+    	takenPieces.put(Constants.KING, 0);
+    	for(int i=0; i<takenPiecesWhite.size(); i++){
+    		switch(takenPiecesWhite.get(i).getType()){
+    		case Constants.PAWN:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		case Constants.KNIGHT:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		case Constants.BISHOP:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		case Constants.ROOK:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		case Constants.QUEEN:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		case Constants.KING:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
+    			break;
+    		}
+    	}
+    	
+    	for(int i=0; i<takenPiecesBlack.size(); i++){
+    		switch(takenPiecesBlack.get(i).getType()){
+    		case Constants.PAWN:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		case Constants.KNIGHT:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		case Constants.BISHOP:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		case Constants.ROOK:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		case Constants.QUEEN:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		case Constants.KING:
+    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			break;
+    		}
+    	}
+    	
+    	//Update von der Anzeige der geschlagenen Figuren
+    	for(int i=0; i< takenPieces.size(); i++){
+    		if(takenPieces.get(takenPiecesWhite.get(i).getType())<0){
+    			for(int j=takenPieces.get(takenPiecesWhite.get(i).getType()); j < 0; j++){
+    				addTakenPieceToOverlay(((String[])takenPieces.keySet().toArray())[i], Constants.Color_BLACK);
+    			}
+    		}else{
+    			for(int j=takenPieces.get(takenPiecesWhite.get(i).getType()); j > 0; j--){
+    				addTakenPieceToOverlay(((String[])takenPieces.keySet().toArray())[i], Constants.Color_WHITE);
+    			}
+    		}
+    	}
+    	
+    	logic.checkWinConditions();
+    }
+    
+    /**
+     * @author Niklas
+     * @param type
+     * @param color
+     */
+    private void addTakenPieceToOverlay(String type, String color){
+    	if(color == Constants.Color_BLACK){
+    		ImageIcon whiteIcon=null;
+    		//TODO URL zu Bildern einfügen
+    		switch(type){
+    		case Constants.PAWN:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		case Constants.KNIGHT:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		case Constants.BISHOP:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		case Constants.ROOK:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		case Constants.QUEEN:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		case Constants.KING:
+    			whiteIcon = new ImageIcon();
+    			break;
+    		}
+    		JLabel whitePiece = new JLabel(whiteIcon);
+    		//TODO Größe anpassen
+    		whitePiece.setBounds(75*piecesWhite.getComponentCount(), 75*(piecesWhite.getComponentCount()/10), 75, 75);
+    		piecesWhite.add(whitePiece);
+    	}else{
+    		ImageIcon blackIcon=null;
+    		//TODO URL zu Bildern einfügen
+    		switch(type){
+    		case Constants.PAWN:
+    			blackIcon = new ImageIcon();
+    			break;
+    		case Constants.KNIGHT:
+    			blackIcon = new ImageIcon();
+    			break;
+    		case Constants.BISHOP:
+    			blackIcon = new ImageIcon();
+    			break;
+    		case Constants.ROOK:
+    			blackIcon = new ImageIcon();
+    			break;
+    		case Constants.QUEEN:
+    			blackIcon = new ImageIcon();
+    			break;
+    		case Constants.KING:
+    			blackIcon = new ImageIcon();
+    			break;
+    		}
+    		JLabel blackPiece = new JLabel(blackIcon);
+    		//TODO Größe anpassen
+    		blackPiece.setBounds(75*piecesBlack.getComponentCount(), 75*(piecesBlack.getComponentCount()/10), 75, 75);
+    		piecesBlack.add(blackPiece);
+    	}
     }
 }

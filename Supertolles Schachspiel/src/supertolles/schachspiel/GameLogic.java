@@ -26,6 +26,9 @@ public class GameLogic {
         printBoard();
     }
     
+    /**
+     * @author Alexander
+     */
     public void startPosition(){
         board[0][0] = new Piece(0, 0, Constants.Color_BLACK, Constants.ROOK);
         board[0][boardlength-1] = new Piece(boardlength-1, 0, Constants.Color_BLACK, Constants.ROOK);
@@ -72,6 +75,9 @@ public class GameLogic {
         }
     }
     
+    /**
+     * @author Niklas
+     */
     void flipBoard(){
         Piece[][] newBoard = new Piece[boardlength][boardlength];
         for(int y = 0 ; y < boardlength ; y++){
@@ -87,28 +93,68 @@ public class GameLogic {
         
     }
     
+    /**
+     * @author Niklas
+     */
     void movePiece(int[] currentCoordinate, int x, int y){
         board[x][y] = board[currentCoordinate[0]][currentCoordinate[1]];
         board[currentCoordinate[0]][currentCoordinate[1]] = null;
     }
     
     void checkWinConditions(){
-        //TODO Methode implementieren
+        if(isCheckMate()){
+        	System.out.println("Ein Spieler steht Schachmatt.");
+        }else{
+        	if(isStaleMate()){
+        		System.out.println("Ein Spieler steht im Patt. Unentschieden!");
+        	}
+        }
     }
     
-    boolean isCheckMate(){
-        //TODO Methode implementieren
+    /**
+     * @author Niklas
+     */
+    public boolean isCheckMate(){
+        if(isCheck(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]) 
+        		&& computeMoveOptions(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]).size() == 0){
+        	Piece[] threatFigure = searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]);
+        	if(threatFigure.length > 1){
+        		return true;
+        	}
+        	for(int i = 0 ; i < boardlength; i++){
+        		for(int j = 0 ; j < boardlength; j++){
+            		if(computeMoveOptions(i, j) != null && computeMoveOptions(i, j).size() > 0){
+            			return false;
+            		}
+            	}
+        	}
+        }
+        
+        return true;
+    }
+    
+    /**
+     * @author Niklas
+     */
+    public boolean isCheck(int x, int y){
+        if(searchThreatFigure(x, y).length > 0){
+        	return true;
+        }
         return false;
     }
     
-    boolean isCheck(int x, int y){
-        //TODO Methode implementieren    
-        return false;
-    }
-    
-    boolean isStaleMate(){
-        //TODO Methode implementieren    
-        return false;
+    /**
+     * @author Niklas
+     */
+    public boolean isStaleMate(){
+        for(int y=0; y<boardlength ; y++){
+        	for(int x=0; x<boardlength ; x++){
+            	if(board[y][x] != null && computeMoveOptions(x, y) != null && computeMoveOptions(x, y).size() > 0){
+            		return false;
+            	}
+            }
+        }
+        return true;
     }
     
     /**
@@ -122,7 +168,6 @@ public class GameLogic {
         
         Piece[] temp = searchKnight(x, y);
         
-        System.err.println(temp.length);
         for(int i=0; i<temp.length; i++){
             figures.add(temp[i]);
         }
@@ -133,51 +178,73 @@ public class GameLogic {
             figures.add(temp[i]);
         }
         
+        temp = searchDiagonals(x, y);
+        
+        for(int i=0; i<temp.length; i++){
+        	figures.add(temp[i]);
+        }
         
         return arrayListToArray(figures);
     }
     
+    /**
+     * @author Niklas
+     * @param x
+     * @param y
+     * @return Returns all Knights which are threatening the figure with coordinates (x,y)
+     */
     public Piece[] searchKnight(int x, int y){
         ArrayList<Piece> figures = new ArrayList<Piece>();
         try{
-            if(board[y+1][x+2]!=null && board[y+1][x+2].getType() == Constants.KNIGHT 
-                && board[y+1][x+2].getColour() != board[y][x].getColour()){
-            figures.add(board[y+1][x+2]);
-            }
-            if(board[y-1][x+2]!=null && board[y-1][x+2].getType() == Constants.KNIGHT 
-                    && board[y-1][x+2].getColour() != board[y][x].getColour()){
-                figures.add(board[y-1][x+2]);
-            }
-            if(board[y+1][x-2]!=null && board[y+1][x-2].getType() == Constants.KNIGHT 
-                    && board[y+1][x-2].getColour() != board[y][x].getColour()){
-                figures.add(board[y+1][x-2]);
-            }
-            if(board[y-1][x-2]!=null && board[y-1][x-2].getType() == Constants.KNIGHT 
-                    && board[y-1][x-2].getColour() != board[y][x].getColour()){
-                figures.add(board[y-1][x-2]);
-            }
-            if(board[y+2][x+1]!=null && board[y+2][x+1].getType() == Constants.KNIGHT 
-                    && board[y+2][x+1].getColour() != board[y][x].getColour()){
-                figures.add(board[y+2][x+1]);
-            }
-            if(board[y-2][x+1]!=null && board[y-2][x+1].getType() == Constants.KNIGHT 
-                    && board[y-2][x+1].getColour() != board[y][x].getColour()){
-                figures.add(board[y-2][x+1]);
-            }
-            if(board[y+2][x-1]!=null && board[y+2][x-1].getType() == Constants.KNIGHT 
-                    && board[y+2][x-1].getColour() != board[y][x].getColour()){
-                figures.add(board[y+2][x-1]);
-            }
-            if(board[y-2][x-1]!=null && board[y-2][x-1].getType() == Constants.KNIGHT 
-                    && board[y-2][x-1].getColour() != board[y][x].getColour()){
-                figures.add(board[y-2][x-1]);
-            }
-        }catch(NullPointerException e){
-            
+        	try{
+        		
+	            if(isInBounds(y+1, x+2) && board[y+1][x+2]!=null && board[y+1][x+2].getType() == Constants.KNIGHT 
+	                && board[y+1][x+2].getColour() != board[y][x].getColour()){
+	            figures.add(board[y+1][x+2]);
+	            }
+	            if(isInBounds(y-1, x+2) && board[y-1][x+2]!=null && board[y-1][x+2].getType() == Constants.KNIGHT 
+	                    && board[y-1][x+2].getColour() != board[y][x].getColour()){
+	                figures.add(board[y-1][x+2]);
+	            }
+	            if(isInBounds(y+1, x-2) && board[y+1][x-2]!=null && board[y+1][x-2].getType() == Constants.KNIGHT 
+	                    && board[y+1][x-2].getColour() != board[y][x].getColour()){
+	                figures.add(board[y+1][x-2]);
+	            }
+	            if(isInBounds(y-1, x-2) && board[y-1][x-2]!=null && board[y-1][x-2].getType() == Constants.KNIGHT 
+	                    && board[y-1][x-2].getColour() != board[y][x].getColour()){
+	                figures.add(board[y-1][x-2]);
+	            }
+	            if(isInBounds(y+2, x+1) && board[y+2][x+1]!=null && board[y+2][x+1].getType() == Constants.KNIGHT 
+	                    && board[y+2][x+1].getColour() != board[y][x].getColour()){
+	                figures.add(board[y+2][x+1]);
+	            }
+	            if(isInBounds(y-2, x+1) && board[y-2][x+1]!=null && board[y-2][x+1].getType() == Constants.KNIGHT 
+	                    && board[y-2][x+1].getColour() != board[y][x].getColour()){
+	                figures.add(board[y-2][x+1]);
+	            }
+	            if(isInBounds(y+2, x-1) && board[y+2][x-1]!=null && board[y+2][x-1].getType() == Constants.KNIGHT 
+	                    && board[y+2][x-1].getColour() != board[y][x].getColour()){
+	                figures.add(board[y+2][x-1]);
+	            }
+	            if(isInBounds(y-2, x-1) && board[y-2][x-1]!=null && board[y-2][x-1].getType() == Constants.KNIGHT 
+	                    && board[y-2][x-1].getColour() != board[y][x].getColour()){
+	                figures.add(board[y-2][x-1]);
+	            }
+	            
+        	}catch(ArrayIndexOutOfBoundsException e0){
+        		throw new IllegalArgumentException();
+        	}
+        	
+        }catch(NullPointerException e1){
+            throw new IllegalStateException();
         }
+        
         return arrayListToArray(figures);
     }
     
+    /**
+     * @author Niklas
+     */
     public Piece[] searchStraights(int x, int y){
         ArrayList<Piece> figures = new ArrayList<Piece>();
         //Vertikale absuchen
@@ -195,13 +262,13 @@ public class GameLogic {
                 }
             }
         }
-        
+        int size = figures.size();
         for(int i = 0; i < boardlength; i++){
             if(x-i > 0 && board[y][i] != null){
-                if(figures.size() == 2){
+                if(figures.size() == size){
                     figures.add(board[y][i]);
                 }else{
-                    figures.set(2, board[y][i]);
+                    figures.set(size, board[y][i]);
                 }
             }else{
                 if(board[y][i] != null && i > x){
@@ -221,7 +288,76 @@ public class GameLogic {
         return arrayListToArray(figures);
     }
 
+    public Piece[] searchDiagonals(int x, int y){
+    	ArrayList<Piece> figures = new ArrayList<Piece>();
+    	int x1, y1, sideDistance;
+    	
+    	if(x >= y){
+    		sideDistance = y;
+    	}else{
+    		sideDistance = x;
+    	}
+    	x1 = x - sideDistance;
+    	y1 = y - sideDistance;
+    	
+    	while(isInBounds(x1, y1)){
+    		if(x1 < x && board[y1][x1]!= null){
+    			if(figures.size()==0){
+    				figures.add(board[y1][x1]);
+    			}else{
+    				figures.set(0, board[y1][x1]);
+    			}
+    		}else{
+    			if(x1 > x && board[y1][x1] != null){
+        			figures.add(board[y1][x1]);
+        			break;
+    			}
+    		}
+    		x1++;
+    		y1++;
+    	}
+    	
+    	if(sideDistance-x >= y){
+    		sideDistance = y;
+    	}else{
+    		sideDistance = sideDistance-x;
+    	}
+    	
+    	x1 = x + sideDistance;
+    	y1 = y - sideDistance;
+    	
+    	int size = figures.size();
+    	while(isInBounds(x1, y1)){
+    		if(x1 > x && board[y1][x1]!= null){
+    			if(figures.size()==size){
+    				figures.add(board[y1][x1]);
+    			}else{
+    				figures.set(size, board[y1][x1]);
+    			}
+    		}else{
+    			if(x1 < x && board[y1][x1] != null){
+        			figures.add(board[y1][x1]);
+        			break;
+    			}
+    		}
+    		x1--;
+    		y1++;
+    	}
+    	
+    	for(int i=0; i<figures.size(); i++){
+    		if(!((figures.get(i).getType() == Constants.QUEEN || figures.get(i).getType() == Constants.BISHOP) 
+    				&& board[y][x].getColour() != figures.get(i).getColour())){
+    			figures.remove(i);
+    			i--;
+    		}
+    	}
+    	
+    	return arrayListToArray(figures);
+    }
     
+    /**
+     * @author Niklas
+     */
     public static Piece[] arrayListToArray(ArrayList<Piece> arrayList){
         Piece[] temp = new Piece[arrayList.size()];
         for(int i=0;i<temp.length; i++){
@@ -230,8 +366,9 @@ public class GameLogic {
         return temp;
     }
     
-    //@author: Alexander
-    
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computeMoveOptions(int x, int y){
         ArrayList<Integer[]> generalMovement = new ArrayList<Integer[]>();
         ArrayList<Integer[]> finalMovement = new ArrayList<Integer[]>();
@@ -320,6 +457,9 @@ public class GameLogic {
         return finalMovement;
     }
     
+    /**
+     * @author Alexander
+     */
     public boolean[][] computeCheckRestrictions(Piece threat){
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
         int x = threat.getX(), y = threat.getY();
@@ -336,6 +476,9 @@ public class GameLogic {
         return possibleMovement;
     }
     
+    /**
+     * @author Alexander
+     */
     public boolean[][] computePinRestrictions(int x, int y){
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
         boolean[][] possibleMovement = new boolean[boardlength][boardlength];
@@ -385,6 +528,9 @@ public class GameLogic {
         return possibleMovement;
     }
     
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computePawnMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         if(isInBounds(x, y-1)){
@@ -403,9 +549,17 @@ public class GameLogic {
             }
         }
         
+        /*
+        if(board[y-1][x] == null && board[y-2][x] == null && !board[x][y].hasMoved()){
+        	moveOptions.add(new Integer[]{x, y-2, 0});
+        }
+        */
         return moveOptions;
     }
     
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computeKnightMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         if(isInBounds(x+2, y+1)){
@@ -484,6 +638,9 @@ public class GameLogic {
         return moveOptions;
     }
     
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computeKingMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         
@@ -506,6 +663,9 @@ public class GameLogic {
         return moveOptions;
     }
     
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computeStraightMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         ArrayList<Integer[]> moveOptionsX = new ArrayList<Integer[]>();
@@ -568,6 +728,9 @@ public class GameLogic {
         return moveOptions;
     }
     
+    /**
+     * @author Alexander
+     */
     public ArrayList<Integer[]> computeDiagonalMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         ArrayList<Integer[]> movementDownRight = new ArrayList<Integer[]>();
@@ -647,6 +810,9 @@ public class GameLogic {
         return moveOptions;
     }
     
+    /**
+     * @author Alexander
+     */
     public int[] getKingCoordinatesCurrentTurn(){
         for(int i = 0; i < boardlength; i++){
             for (int j = 0; j < board.length; j++) {
