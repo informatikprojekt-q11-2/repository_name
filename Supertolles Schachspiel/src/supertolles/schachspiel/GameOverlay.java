@@ -121,7 +121,7 @@ public class GameOverlay extends JPanel{
             
             if(isMoveOption){
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
-                timer.clock();
+                timer.clock(); 
                 update();
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){

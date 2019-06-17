@@ -66,7 +66,7 @@ public class Timer extends StopWatch{
             @Override
             public void run() {
                 long currentTime = getTime(TimeUnit.SECONDS);
-                //TODO Text von playingTime wird auf time gesetzt
+                //TODO Text von playingTime wird auf time gesetzt 
                 playingTime.setText(getTime_H_Min_Sek(currentTime));
                 overlay.repaint();
             }

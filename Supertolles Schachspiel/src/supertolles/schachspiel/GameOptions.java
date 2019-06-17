@@ -17,7 +17,7 @@ public class GameOptions {
     
     
     public GameOptions(){
-        game = new GameOverlay(60, 8);
+        game = new GameOverlay(60, 8); 
         
         window = new JFrame();
         window.setBounds(0, 0, 1000, 1000);
