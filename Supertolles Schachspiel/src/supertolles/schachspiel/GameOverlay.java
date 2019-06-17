@@ -96,6 +96,7 @@ public class GameOverlay extends JPanel{
         
         takenPiecesWhite = new ArrayList<Piece>();
         takenPiecesBlack = new ArrayList<Piece>();
+        updateBoard();
     }
     
     
@@ -283,22 +284,22 @@ public class GameOverlay extends JPanel{
     		//TODO URL zu Bildern einfügen
     		switch(type){
     		case Constants.PAWN:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/PawnTemp.png"));
     			break;
     		case Constants.KNIGHT:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KnightTemp.png"));
     			break;
     		case Constants.BISHOP:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/BishopTemp.png"));
     			break;
     		case Constants.ROOK:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/RookTemp.png"));
     			break;
     		case Constants.QUEEN:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/QueenTemp.png"));
     			break;
     		case Constants.KING:
-    			whiteIcon = new ImageIcon();
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KingTemp.png"));
     			break;
     		}
     		JLabel whitePiece = new JLabel(whiteIcon);
@@ -310,22 +311,22 @@ public class GameOverlay extends JPanel{
     		//TODO URL zu Bildern einfügen
     		switch(type){
     		case Constants.PAWN:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/PawnTemp.png"));
     			break;
     		case Constants.KNIGHT:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KnightTemp.png"));
     			break;
     		case Constants.BISHOP:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/BishopTemp.png"));
     			break;
     		case Constants.ROOK:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/RookTemp.png"));
     			break;
     		case Constants.QUEEN:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/QueenTemp.png"));
     			break;
     		case Constants.KING:
-    			blackIcon = new ImageIcon();
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KingTemp.png"));
     			break;
     		}
     		JLabel blackPiece = new JLabel(blackIcon);
@@ -348,44 +349,44 @@ public class GameOverlay extends JPanel{
         			case Constants.Color_WHITE:
         				switch(temp.getType()){
             			case Constants.PAWN:
-            				board[y][x].setIcon(new ImageIcon());
+            				board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/PawnTemp.png")));
                 			break;
                 		case Constants.KNIGHT:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KnightTemp.png")));
                 			break;
                 		case Constants.BISHOP:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/BishopTemp.png")));
                 			break;
                 		case Constants.ROOK:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/RookTemp.png")));
                 			break;
                 		case Constants.QUEEN:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/QueenTemp.png")));
                 			break;
                 		case Constants.KING:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KingTemp.png")));
                 			break;
             			}
         				break;
         			case Constants.Color_BLACK:
         				switch(temp.getType()){
-            			case Constants.PAWN:
-            				board[y][x].setIcon(new ImageIcon());
+        				case Constants.PAWN:
+            				board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/PawnTemp.png")));
                 			break;
                 		case Constants.KNIGHT:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KnightTemp.png")));
                 			break;
                 		case Constants.BISHOP:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/BishopTemp.png")));
                 			break;
                 		case Constants.ROOK:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/RookTemp.png")));
                 			break;
                 		case Constants.QUEEN:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/QueenTemp.png")));
                 			break;
                 		case Constants.KING:
-                			board[y][x].setIcon(new ImageIcon());
+                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource("/supertolles/schachspiel/Pictures/KingTemp.png")));
                 			break;
             			}
         				break;

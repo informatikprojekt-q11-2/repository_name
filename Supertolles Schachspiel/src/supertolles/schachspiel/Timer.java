@@ -52,7 +52,6 @@ public class Timer extends StopWatch{
         
     }
     
-    //TODO Methode wird nach dem ersten Zug aufgerufen
     public void clock(){
         if(!isStarted()){
             start();
