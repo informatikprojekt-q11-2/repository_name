@@ -400,7 +400,7 @@ public class GameLogic {
     	for(int i=0; i<figures.size(); i++){
     		if(!((figures.get(i).getType() == Constants.QUEEN || figures.get(i).getType() == Constants.BISHOP) 
     				&& board[y][x].getColour() != figures.get(i).getColour())){
-                    if(!(figures.get(i).getType() == Constants.PAWN && board[y][x].getColour() != figures.get(i).getColour() && y>figures.get(i).getY())){
+                    if(!(figures.get(i).getType() == Constants.PAWN && board[y][x].getColour() != figures.get(i).getColour() && y==figures.get(i).getY()+1)){
                         figures.remove(i);
                         i--;
                     }

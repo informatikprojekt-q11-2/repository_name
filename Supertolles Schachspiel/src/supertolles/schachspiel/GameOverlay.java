@@ -268,7 +268,7 @@ public class GameOverlay extends JPanel{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
- */   	logic.nextMove();
+*/    	logic.nextMove();
     	updateBoard();
     	
     }
