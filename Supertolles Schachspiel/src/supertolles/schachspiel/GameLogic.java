@@ -190,6 +190,11 @@ public class GameLogic {
         	figures.add(temp[i]);
         }
         
+        temp = searchKing(x, y, board);
+        for(int i=0; i<temp.length; i++){
+        	figures.add(temp[i]);
+        }
+        
         return arrayListToArray(figures);
     }
     
@@ -231,6 +236,11 @@ public class GameLogic {
         
         temp = searchDiagonals(x, y, tempBoard);
         
+        for(int i=0; i<temp.length; i++){
+        	figures.add(temp[i]);
+        }
+        
+        temp = searchKing(x, y, tempBoard);
         for(int i=0; i<temp.length; i++){
         	figures.add(temp[i]);
         }
@@ -408,6 +418,17 @@ public class GameLogic {
     	}
     	
     	return arrayListToArray(figures);
+    }
+    
+    public Piece[] searchKing(int x, int y, Piece[][] board){
+    	for(int i=y-1; i<=y+1;i++){
+    		for(int j=x-1; j<=x+1;j++){
+        		if(isInBounds(j, i) && board[i][j] != null && board[i][j].getType() == Constants.KING && board[i][j].getColour() != board[y][x].getColour()){
+        			return new Piece[]{board[i][j]};
+        		}
+        	}
+    	}
+    	return new Piece[]{};
     }
     
     /**
