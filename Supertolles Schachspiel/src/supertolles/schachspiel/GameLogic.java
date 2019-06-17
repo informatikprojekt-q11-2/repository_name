@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GameLogic {
     
     public Piece[][] board;
-    GameOverlay game;
+    public GameOverlay game;
     final int boardlength;
     
     public GameLogic(GameOverlay g, int boardl){
@@ -96,9 +96,9 @@ public class GameLogic {
     /**
      * @author Niklas
      */
-    void movePiece(int[] currentCoordinate, int x, int y){
-        if(!board[y][x].getMoved()){
-            board[y][x].setMoved(true);
+    public void movePiece(int[] currentCoordinate, int x, int y){
+        if(!board[currentCoordinate[1]][currentCoordinate[0]].getMoved()){
+            board[currentCoordinate[1]][currentCoordinate[0]].setMoved(true);
         }
         board[y][x] = board[currentCoordinate[1]][currentCoordinate[0]];
         board[currentCoordinate[1]][currentCoordinate[0]] = null;
@@ -541,20 +541,29 @@ public class GameLogic {
                     int xPinPiece = x+((pinRestrictions.size()+1)*xDirection);
                     int yPinPiece = y+((pinRestrictions.size()+1)*yDirection);
                     
-                    if(((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
-                       (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
-                       (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN)){
-                            pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
-                            for (int i = 0; i < pinRestrictions.size(); i++) {
-                                possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
-                            }
+                    if(isInBounds(xPinPiece, yPinPiece)){
+                    	 if(((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
+                                 (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
+                                 (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN)){
+                                      pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
+                                      for (int i = 0; i < pinRestrictions.size(); i++) {
+                                          possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
+                                      }
+                              }else{
+                                  for (int i = 0; i < boardlength; i++) {
+                                      for (int j = 0; j < boardlength; j++) {
+                                          possibleMovement[i][j] = true;
+                                      }
+                                  }
+                              }
                     }else{
-                        for (int i = 0; i < boardlength; i++) {
+                    	for (int i = 0; i < boardlength; i++) {
                             for (int j = 0; j < boardlength; j++) {
                                 possibleMovement[i][j] = true;
                             }
                         }
                     }
+                    
                 }
             }else{
                 for (int i = 0; i < boardlength; i++) {
@@ -604,7 +613,7 @@ public class GameLogic {
             }
         }
         
-        if(board[y-1][x] == null && board[y-2][x] == null && !board[x][y].getMoved()){
+        if(board[y-1][x] == null && board[y-2][x] == null && !board[y][x].getMoved()){
         	moveOptions.add(new Integer[]{x, y-2, 0});
         }
         return moveOptions;
@@ -942,4 +951,10 @@ public class GameLogic {
     public boolean isInBounds(int x, int y){
         return (0 <= x && x < boardlength && 0 <= y && y < boardlength);
     }
+    
+    public void nextMove(){
+    	flipBoard();
+    	checkWinConditions();
+    }
+    
 }
