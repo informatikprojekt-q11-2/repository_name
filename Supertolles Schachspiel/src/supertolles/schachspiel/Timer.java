@@ -77,7 +77,7 @@ public class Timer extends StopWatch{
 					timeRemainingBlack = timeInSec - currentTime + startTime;
 				}
                 //TODO Text von playingTime wird auf time gesetzt, bzw. auf die jeweiligen Label der Spieler
-                System.out.println("Spielzeit: "+getTime_H_Min_Sek(currentTime)+ "    Spielzeit weiß:"+getTime_H_Min_Sek(timeRemainingWhite)+"    Spielzeit schwarz:"+getTime_H_Min_Sek(timeRemainingBlack));
+                System.out.println("Spielzeit: "+getTime_H_Min_Sek(currentTime)+ "    Spielzeit weiï¿½:"+getTime_H_Min_Sek(timeRemainingWhite)+"    Spielzeit schwarz:"+getTime_H_Min_Sek(timeRemainingBlack));
 			}
 		};
     }

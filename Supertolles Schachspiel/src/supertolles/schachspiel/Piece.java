@@ -12,13 +12,14 @@ package supertolles.schachspiel;
 public class Piece {
     String type,colour;
     int x,y;
-   //boolean moved;
+    boolean moved;
     
     public Piece(int X, int Y, String col, String typ){
         type = typ;
         colour = col;
         x = X;
         y = Y;
+        moved = false;
     }
     
     public void setType(String typ){
@@ -49,12 +50,12 @@ public class Piece {
     public int getY(){
         return y;
     }
-  /*  
-    public boolean hasMoved(){
+    
+    public boolean getMoved(){
     	return moved;
     }
     
-    public void setMoved(){
-    	moved = true;
-    }*/
+    public void setMoved(boolean mov){
+    	moved = mov;
+    }
 }

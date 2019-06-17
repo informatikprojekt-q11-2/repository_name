@@ -97,6 +97,9 @@ public class GameLogic {
      * @author Niklas
      */
     void movePiece(int[] currentCoordinate, int x, int y){
+        if(!board[y][x].getMoved()){
+            board[y][x].setMoved(true);
+        }
         board[y][x] = board[currentCoordinate[1]][currentCoordinate[0]];
         board[currentCoordinate[1]][currentCoordinate[0]] = null;
     }
@@ -123,7 +126,7 @@ public class GameLogic {
         	}
         	for(int i = 0 ; i < boardlength; i++){
         		for(int j = 0 ; j < boardlength; j++){
-            		if(computeMoveOptions(i, j) != null && computeMoveOptions(i, j).size() > 0){
+            		if(computeMoveOptions(i, j).size() > 0){
             			return false;
             		}
             	}
@@ -413,17 +416,17 @@ public class GameLogic {
         boolean[][] pinRestrictions = new boolean[boardlength][boardlength];
         
         if(board[y][x] == null){
-            return null;
+            return finalMovement;
         }else{
             if((game.gamestate == Constants.BLACK_TO_MOVE || game.gamestate == Constants.BLACK_TO_SELECT) && board[y][x].getColour().equals(Constants.Color_WHITE)||
                (game.gamestate == Constants.WHITE_TO_MOVE || game.gamestate == Constants.WHITE_TO_SELECT) && board[y][x].getColour().equals(Constants.Color_BLACK)){
-                return null;
+                return finalMovement;
             }else{
                 if(searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]).length > 1){
                     if(board[y][x].getType() == Constants.KING){
-                        //return computeKingMovement(x,y);
+                        return computeKingMovement(x,y);
                     }else{
-                        return null;
+                        return finalMovement;
                     }    
                 }else{
                     if(searchThreatFigure(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]).length == 0){
@@ -553,6 +556,12 @@ public class GameLogic {
                         }
                     }
                 }
+            }else{
+                for (int i = 0; i < boardlength; i++) {
+                    for (int j = 0; j < boardlength; j++) {
+                        possibleMovement[i][j] = true;
+                    }
+                }
             }
         }else{
             for (int i = 0; i < boardlength; i++) {
@@ -567,6 +576,15 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * computes the basic Movement of a Pawn standing on the field with the given parameters
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computePawnMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
@@ -586,16 +604,23 @@ public class GameLogic {
             }
         }
         
-        /*
-        if(board[y-1][x] == null && board[y-2][x] == null && !board[x][y].hasMoved()){
+        if(board[y-1][x] == null && board[y-2][x] == null && !board[x][y].getMoved()){
         	moveOptions.add(new Integer[]{x, y-2, 0});
         }
-        */
         return moveOptions;
     }
     
     /**
      * @author Alexander
+     * 
+     * computes the basic Movement of a Knight standing on the field with the given parameters
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computeKnightMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
@@ -677,6 +702,15 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * computes the possible Movement of a king standing on the field with the given parameters
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computeKingMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
@@ -684,12 +718,14 @@ public class GameLogic {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if(isInBounds(x+j, y+i)){
-                    if(isCheck(x+j, y+i) == false){
-                        if(board[y+i][x+j] == null){
-                            moveOptions.add(new Integer[]{x+j, y+i, 0});
-                        }else{
-                            if(board[y+i][x+j].getColour() != board[y][x].getColour()){
-                                moveOptions.add(new Integer[]{x+j, y+i, 1});
+                    if(x != board[y][x].getX() && y != board[y][x].getY()){
+                        if(searchThreatFigure(x+j, y+i, board[y][x]).length == 0){
+                            if(board[y+i][x+j] == null){
+                                moveOptions.add(new Integer[]{x+j, y+i, 0});
+                            }else{
+                                if(board[y+i][x+j].getColour() != board[y][x].getColour()){
+                                    moveOptions.add(new Integer[]{x+j, y+i, 1});
+                                }
                             }
                         }
                     }
@@ -702,6 +738,15 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * computes the basic straight Movement outward from the field with the given parameters
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computeStraightMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
@@ -768,7 +813,7 @@ public class GameLogic {
     /**
      * @author Alexander
      * 
-     * computes the basic diagonal Movement outward from the given parameters
+     * computes the basic diagonal Movement outward from the field with the given parameters
      * 
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
