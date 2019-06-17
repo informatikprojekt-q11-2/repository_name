@@ -464,7 +464,7 @@ public class GameLogic {
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
         int x = threat.getX(), y = threat.getY();
         boolean[][] possibleMovement = new boolean[boardlength][boardlength];
-        int xDirection = (int) Math.signum(y-yk), yDirection = (int) Math.signum(x-xk);
+        int xDirection = (int) Math.signum(x-xk), yDirection = (int) Math.signum(y-yk);
         
         if(threat.getType() != Constants.KNIGHT && threat.getType() != Constants.PAWN){
             for (int i = 1; Math.abs(i*xDirection) <= Math.abs(x-xk) && Math.abs(i*yDirection) <= Math.abs(y-yk); i++) {
@@ -730,6 +730,15 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * computes the basic diagonal Movement outward from the given parameters
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computeDiagonalMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
@@ -812,6 +821,12 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * gets the Coordinates of the King of the colour that can currently move
+     * 
+     * @return integer Array of size 2 with the Coordinates of the King of the colour that can currently move
+     *      index 0: x-Coordinate
+     *      index 1: y-Coordinate
      */
     public int[] getKingCoordinatesCurrentTurn(){
         for(int i = 0; i < boardlength; i++){
@@ -832,6 +847,16 @@ public class GameLogic {
         this.boardlength = 0;
     }
     
+    /**
+     * @author Alexander
+     * 
+     * tests if a field is in bounds
+     * 
+     * @param x: x-Coordinate of the tested field
+     * @param y: y-Coordinate of the tested field
+     * @return true if the field is in boudns
+     * returns false if the field is out of bounds
+     */
     public boolean isInBounds(int x, int y){
         return (0 <= x && x < boardlength && 0 <= y && y < boardlength);
     }

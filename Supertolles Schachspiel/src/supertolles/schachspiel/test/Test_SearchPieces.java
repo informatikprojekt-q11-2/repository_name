@@ -31,16 +31,16 @@ public class Test_SearchPieces extends GameLogic{
     
     void test1(){
         board[4][4]= new Piece(4,4, Constants.Color_WHITE, Constants.KING);
-        board[0][4]= new Piece(0,4, Constants.Color_BLACK, Constants.QUEEN);
-        board[3][4]= new Piece(3,4, Constants.Color_WHITE, Constants.BISHOP);
-        board[2][3]= new Piece(2,3, Constants.Color_BLACK, Constants.KNIGHT);
-        board[6][3]= new Piece(6,3, Constants.Color_BLACK, Constants.KNIGHT);
-        board[2][5]= new Piece(2,5, Constants.Color_WHITE, Constants.KNIGHT);
-        board[4][0]= new Piece(4,0, Constants.Color_BLACK, Constants.QUEEN);
-        board[5][4]= new Piece(5,4, Constants.Color_WHITE, Constants.PAWN);
-        board[7][4]= new Piece(7,4, Constants.Color_BLACK, Constants.ROOK);
-        board[4][6]= new Piece(4,6, Constants.Color_BLACK, Constants.BISHOP);
-        board[4][7]= new Piece(4,7, Constants.Color_BLACK, Constants.ROOK);
+        board[0][4]= new Piece(4,0, Constants.Color_BLACK, Constants.QUEEN);
+        board[3][4]= new Piece(4,3, Constants.Color_WHITE, Constants.BISHOP);
+        board[2][3]= new Piece(3,2, Constants.Color_BLACK, Constants.KNIGHT);
+        board[6][3]= new Piece(3,6, Constants.Color_BLACK, Constants.KNIGHT);
+        board[2][5]= new Piece(5,2, Constants.Color_WHITE, Constants.KNIGHT);
+        board[4][0]= new Piece(0,4, Constants.Color_BLACK, Constants.QUEEN);
+        board[5][4]= new Piece(4,5, Constants.Color_WHITE, Constants.PAWN);
+        board[7][4]= new Piece(4,7, Constants.Color_BLACK, Constants.ROOK);
+        board[4][6]= new Piece(6,4, Constants.Color_BLACK, Constants.BISHOP);
+        board[4][7]= new Piece(7,4, Constants.Color_BLACK, Constants.ROOK);
         
         Piece[] threat = searchThreatFigure(4, 4);
         System.out.println(threat.length);
