@@ -18,10 +18,10 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //new GameOptions();
+        new GameOptions();
         
         //Aufruf von Testklassen
-        new Test_SearchPieces();
+        //new Test_SearchPieces();
     	//new Test_Timer();
     }
     

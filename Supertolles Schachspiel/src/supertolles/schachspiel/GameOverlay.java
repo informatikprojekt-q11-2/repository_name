@@ -59,6 +59,7 @@ public class GameOverlay extends JPanel{
         //timer = new Timer(logic, this, timeInMs);
         playingField = new JPanel(null);
         playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
+        currentMoveOptions = new ArrayList<Integer[]>();
         
         board = new ChessButton[boardLength][boardLength];
         for(int y = 0; y < boardLength; y++){
@@ -93,13 +94,6 @@ public class GameOverlay extends JPanel{
         
         add(playingField);
         
-        currentMoveOptions = new ArrayList<Integer[]>();
-        currentMoveOptions.add(new Integer[]{3,5,0});
-        currentMoveOptions.add(new Integer[]{4,5,0});
-        currentMoveOptions.add(new Integer[]{5,5,0});
-        currentMoveOptions.add(new Integer[]{6,5,1});
-        
-        
         takenPiecesWhite = new ArrayList<Piece>();
         takenPiecesBlack = new ArrayList<Piece>();
     }
@@ -127,7 +121,7 @@ public class GameOverlay extends JPanel{
             
             if(isMoveOption){
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
-                //update();
+                update();
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
                     if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
@@ -146,7 +140,15 @@ public class GameOverlay extends JPanel{
             if(logic.board[y][x] != null){
                 if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_WHITE) || 
                    ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_BLACK)){
-                    //currentMoveOptions = logic.computeMoveOptions(x,y);
+                	for(int i = 0; i<currentMoveOptions.size();i++){
+                         if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
+                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.WHITE);
+                         }
+                         else{
+                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.BLACK);
+                         }
+                    }
+                    currentMoveOptions = logic.computeMoveOptions(x,y);
                     clickedX = x;
                     clickedY = y;
 
@@ -192,7 +194,7 @@ public class GameOverlay extends JPanel{
     	
     	//0: Pawn, 1: Knight, 2: Bishop, 3: Rook, 4: Queen, 5: King
     	//int[] takenPieces = new int[6];
-    	HashMap<String, Integer> takenPieces = new HashMap();
+    	HashMap<String, Integer> takenPieces = new HashMap<String, Integer>();
     	takenPieces.put(Constants.PAWN, 0);
     	takenPieces.put(Constants.KNIGHT, 0);
     	takenPieces.put(Constants.BISHOP, 0);
@@ -225,40 +227,48 @@ public class GameOverlay extends JPanel{
     	for(int i=0; i<takenPiecesBlack.size(); i++){
     		switch(takenPiecesBlack.get(i).getType()){
     		case Constants.PAWN:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		case Constants.KNIGHT:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		case Constants.BISHOP:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		case Constants.ROOK:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		case Constants.QUEEN:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		case Constants.KING:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())-1);
+    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
     			break;
     		}
     	}
     	
     	//Update von der Anzeige der geschlagenen Figuren
     	for(int i=0; i< takenPieces.size(); i++){
-    		if(takenPieces.get(takenPiecesWhite.get(i).getType())<0){
-    			for(int j=takenPieces.get(takenPiecesWhite.get(i).getType()); j < 0; j++){
-    				addTakenPieceToOverlay(((String[])takenPieces.keySet().toArray())[i], Constants.Color_BLACK);
+    		if(takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i])<0){
+    			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j < 0; j++){
+    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_BLACK);
     			}
     		}else{
-    			for(int j=takenPieces.get(takenPiecesWhite.get(i).getType()); j > 0; j--){
-    				addTakenPieceToOverlay(((String[])takenPieces.keySet().toArray())[i], Constants.Color_WHITE);
+    			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j > 0; j--){
+    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_WHITE);
     			}
     		}
     	}
+    	updateBoard();
+    	//Kurzer Delay nach gemachtem Zug, bevor sich das Spielfeld umdreht
+/*    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+ */   	logic.nextMove();
+    	updateBoard();
     	
-    	logic.checkWinConditions();
     }
     
     /**
@@ -323,4 +333,68 @@ public class GameOverlay extends JPanel{
     		piecesBlack.add(blackPiece);
     	}
     }
+    
+    /**
+     * @author Niklas
+     */
+    //TODO URL zu den Icons einfügen!!!!
+    void updateBoard(){
+    	for(int y = 0 ; y < board.length; y++){
+    		for(int x = 0 ; x < board.length; x++){
+        		Piece temp = logic.board[y][x];
+        		if(temp != null){
+        			switch(temp.getColour()){
+        			case Constants.Color_WHITE:
+        				switch(temp.getType()){
+            			case Constants.PAWN:
+            				board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.KNIGHT:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.BISHOP:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.ROOK:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.QUEEN:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.KING:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+            			}
+        				break;
+        			case Constants.Color_BLACK:
+        				switch(temp.getType()){
+            			case Constants.PAWN:
+            				board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.KNIGHT:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.BISHOP:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.ROOK:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.QUEEN:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+                		case Constants.KING:
+                			board[y][x].setIcon(new ImageIcon());
+                			break;
+            			}
+        				break;
+        			}
+        		}else{
+        			board[y][x].setIcon(null);
+        		}
+        	}
+    	}
+    	repaint();
+    }
+    
 }

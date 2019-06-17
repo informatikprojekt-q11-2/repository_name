@@ -21,15 +21,15 @@ public class Test_SearchPieces extends GameLogic{
 
     public Test_SearchPieces(){
         super(new GameOverlay(0, 8), 8);
-        for(int i = 0; i<8;i++){
+        
+    }
+    
+    void test1(){
+    	for(int i = 0; i<8;i++){
             for(int j = 0; j<8;j++){
                 board[i][j] = null;
             }
         }
-        test2();
-    }
-    
-    void test1(){
         board[4][4]= new Piece(4,4, Constants.Color_WHITE, Constants.KING);
         board[0][4]= new Piece(4,0, Constants.Color_BLACK, Constants.QUEEN);
         board[3][4]= new Piece(4,3, Constants.Color_WHITE, Constants.BISHOP);
@@ -51,6 +51,11 @@ public class Test_SearchPieces extends GameLogic{
     }
     
     void test2(){
+    	for(int i = 0; i<8;i++){
+            for(int j = 0; j<8;j++){
+                board[i][j] = null;
+            }
+        }
     	board[4][7]= new Piece(7,4, Constants.Color_WHITE, Constants.KING);
     	board[1][2]= new Piece(2,1, Constants.Color_WHITE, Constants.BISHOP);
     	board[0][6]= new Piece(6,0, Constants.Color_BLACK, Constants.ROOK);
@@ -72,5 +77,6 @@ public class Test_SearchPieces extends GameLogic{
         	System.out.println("x:"+a.get(i)[0]+" y:"+a.get(i)[1]);
         }
     }
+    
  
 }
