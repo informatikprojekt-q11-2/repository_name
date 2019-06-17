@@ -97,8 +97,8 @@ public class GameLogic {
      * @author Niklas
      */
     void movePiece(int[] currentCoordinate, int x, int y){
-        board[x][y] = board[currentCoordinate[0]][currentCoordinate[1]];
-        board[currentCoordinate[0]][currentCoordinate[1]] = null;
+        board[y][x] = board[currentCoordinate[1]][currentCoordinate[0]];
+        board[currentCoordinate[1]][currentCoordinate[0]] = null;
     }
     
     void checkWinConditions(){
@@ -166,19 +166,56 @@ public class GameLogic {
     public Piece[] searchThreatFigure(int x, int y){
         ArrayList<Piece> figures = new ArrayList<Piece>();
         
-        Piece[] temp = searchKnight(x, y);
+        Piece[] temp = searchKnight(x, y, board);
         
         for(int i=0; i<temp.length; i++){
             figures.add(temp[i]);
         }
         
-        temp = searchStraights(x, y);
+        temp = searchStraights(x, y, board);
         
         for(int i=0; i<temp.length; i++){
             figures.add(temp[i]);
         }
         
-        temp = searchDiagonals(x, y);
+        temp = searchDiagonals(x, y, board);
+        
+        for(int i=0; i<temp.length; i++){
+        	figures.add(temp[i]);
+        }
+        
+        return arrayListToArray(figures);
+    }
+    
+    /**
+     * This method is needed for ArrayList<Integer[]> computeKingMovement(int x, int y) !
+     * @author Niklas
+     * @param x X-Coordinate on which the investigated figure would be standing
+     * @param y Y-Coordinate on which the investigated figure would be standing
+     * @param piece Piece which should be investigated on field (x,y) temporarily 
+     * @return returns all figures which are threatening the figure (x,y)
+     */
+    public Piece[] searchThreatFigure(int x, int y, Piece piece){
+    	Piece[][] tempBoard = board;
+    	tempBoard[y][x] = piece;
+    	tempBoard[piece.getY()][piece.getX()]=null;
+    	piece.setCoordinates(x, y);
+    	
+        ArrayList<Piece> figures = new ArrayList<Piece>();
+        
+        Piece[] temp = searchKnight(x, y, tempBoard);
+        
+        for(int i=0; i<temp.length; i++){
+            figures.add(temp[i]);
+        }
+        
+        temp = searchStraights(x, y, tempBoard);
+        
+        for(int i=0; i<temp.length; i++){
+            figures.add(temp[i]);
+        }
+        
+        temp = searchDiagonals(x, y, tempBoard);
         
         for(int i=0; i<temp.length; i++){
         	figures.add(temp[i]);
@@ -193,7 +230,7 @@ public class GameLogic {
      * @param y
      * @return Returns all Knights which are threatening the figure with coordinates (x,y)
      */
-    public Piece[] searchKnight(int x, int y){
+    public Piece[] searchKnight(int x, int y, Piece[][] board){
         ArrayList<Piece> figures = new ArrayList<Piece>();
         try{
         	try{
@@ -245,7 +282,7 @@ public class GameLogic {
     /**
      * @author Niklas
      */
-    public Piece[] searchStraights(int x, int y){
+    public Piece[] searchStraights(int x, int y, Piece[][] board){
         ArrayList<Piece> figures = new ArrayList<Piece>();
         //Vertikale absuchen
         for(int i = 0; i < boardlength; i++){
@@ -278,7 +315,7 @@ public class GameLogic {
             }
         }
         for(int i = 0; i < figures.size(); i++){
-            if(!(figures.get(i).getColour() != board[y][x].getColour() 
+            if(figures.get(i) != null && !(figures.get(i).getColour() != board[y][x].getColour() 
                     && (figures.get(i).getType() == Constants.QUEEN || figures.get(i).getType() == Constants.ROOK))){
                 figures.remove(i);
                 i--;
@@ -288,7 +325,7 @@ public class GameLogic {
         return arrayListToArray(figures);
     }
 
-    public Piece[] searchDiagonals(int x, int y){
+    public Piece[] searchDiagonals(int x, int y, Piece[][] board){
     	ArrayList<Piece> figures = new ArrayList<Piece>();
     	int x1, y1, sideDistance;
     	
