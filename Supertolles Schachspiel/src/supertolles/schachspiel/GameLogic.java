@@ -102,6 +102,7 @@ public class GameLogic {
         }
         board[y][x] = board[currentCoordinate[1]][currentCoordinate[0]];
         board[currentCoordinate[1]][currentCoordinate[0]] = null;
+        board[y][x].setCoordinates(x, y);
     }
     
     void checkWinConditions(){
@@ -131,6 +132,8 @@ public class GameLogic {
             		}
             	}
         	}
+        }else{
+            return false;
         }
         
         return true;
@@ -199,10 +202,18 @@ public class GameLogic {
      * @return returns all figures which are threatening the figure (x,y)
      */
     public Piece[] searchThreatFigure(int x, int y, Piece piece){
-    	Piece[][] tempBoard = board;
+    	Piece[][] tempBoard = new Piece[boardlength][boardlength];
+        
+        for(int i = 0; i< boardlength;i++){
+            for (int j = 0; j < boardlength; j++) {
+                tempBoard[i][j] = board[i][j];
+            }
+        }
+                
     	tempBoard[y][x] = piece;
     	tempBoard[piece.getY()][piece.getX()]=null;
-    	piece.setCoordinates(x, y);
+        int xActually = piece.getX(), yActually = piece.getY();
+    	tempBoard[y][x].setCoordinates(x, y);
     	
         ArrayList<Piece> figures = new ArrayList<Piece>();
         
@@ -224,6 +235,8 @@ public class GameLogic {
         	figures.add(temp[i]);
         }
         
+        piece.setCoordinates(xActually, yActually);
+        //board[yActually][xActually] = piece;
         return arrayListToArray(figures);
     }
     
@@ -387,8 +400,10 @@ public class GameLogic {
     	for(int i=0; i<figures.size(); i++){
     		if(!((figures.get(i).getType() == Constants.QUEEN || figures.get(i).getType() == Constants.BISHOP) 
     				&& board[y][x].getColour() != figures.get(i).getColour())){
-    			figures.remove(i);
-    			i--;
+                    if(!(figures.get(i).getType() == Constants.PAWN && board[y][x].getColour() != figures.get(i).getColour() && y>figures.get(i).getY())){
+                        figures.remove(i);
+                        i--;
+                    }
     		}
     	}
     	
@@ -441,7 +456,7 @@ public class GameLogic {
                 }
                 
                 pinRestrictions = computePinRestrictions(x,y);
-                
+                  
                 switch(board[y][x].getType()){
                     
                     case Constants.PAWN:    generalMovement = computePawnMovement(x,y);
@@ -522,7 +537,7 @@ public class GameLogic {
     public boolean[][] computePinRestrictions(int x, int y){
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
         boolean[][] possibleMovement = new boolean[boardlength][boardlength];
-        int xDirection = (int) Math.signum(y-yk), yDirection = (int) Math.signum(x-xk);
+        int xDirection = (int) Math.signum(x-xk), yDirection = (int) Math.signum(y-yk);
         boolean pin = true;
         ArrayList<Integer[]> pinRestrictions = new ArrayList<Integer[]>();
         
@@ -562,8 +577,13 @@ public class GameLogic {
                                 possibleMovement[i][j] = true;
                             }
                         }
+                    }   
+                }else{
+                    for (int i = 0; i < boardlength; i++) {
+                        for (int j = 0; j < boardlength; j++) {
+                            possibleMovement[i][j] = true;
+                        }
                     }
-                    
                 }
             }else{
                 for (int i = 0; i < boardlength; i++) {
@@ -727,7 +747,7 @@ public class GameLogic {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if(isInBounds(x+j, y+i)){
-                    if(x != board[y][x].getX() && y != board[y][x].getY()){
+                    if(!(x+j == x && y+i == y)){
                         if(searchThreatFigure(x+j, y+i, board[y][x]).length == 0){
                             if(board[y+i][x+j] == null){
                                 moveOptions.add(new Integer[]{x+j, y+i, 0});

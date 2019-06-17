@@ -49,14 +49,14 @@ public class GameOverlay extends JPanel{
     Timer timer;
     Protocol protocol;
     
-    public GameOverlay(int timeInMs, int boardLength){
+    public GameOverlay(int timeInSec, int boardLength){
         int buttonHeight = 80;
         
         setLayout(null);
         
         gamestate = Constants.WHITE_TO_SELECT;
         logic = new GameLogic(this, boardLength);
-        //timer = new Timer(logic, this, timeInMs);
+        timer = new Timer(logic, this, timeInSec);
         playingField = new JPanel(null);
         playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
         currentMoveOptions = new ArrayList<Integer[]>();
@@ -121,6 +121,7 @@ public class GameOverlay extends JPanel{
             
             if(isMoveOption){
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
+                timer.clock();
                 update();
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){

@@ -22,21 +22,34 @@ public class Timer extends StopWatch{
     private long timeRemainingWhite, timeRemainingBlack;
     private long startTime;
     private GameLogic logic;
+    private GameOverlay overlay;
     private String currentColor=Constants.Color_WHITE;
     
     public Timer(GameLogic logic, GameOverlay overlay, long timeInSec){
         refreshTimer = new java.util.Timer();
+    	this.overlay = overlay;
         if(timeInSec > 0){
-            //TODO  JLabels timeWhite und timeBlack hier einfuegen anstatt in GameOverlay
+            //TODO  Größen anpassen
+        	timeWhite = new JLabel("-1");
+        	timeWhite.setBounds(1000-250, 25, 250, 25);
+        	timeBlack = new JLabel("-1");
+        	timeBlack.setBounds(1000-250, 50, 250, 25);
+        	playingTime = new JLabel("00:00:00");
+        	playingTime.setBounds(1000-250, 0, 250, 25);
+        	overlay.add(playingTime);
+        	overlay.add(timeWhite);
+        	overlay.add(timeBlack);
             this.logic = logic;
             this.timeInSec = timeRemainingWhite = timeRemainingBlack = timeInSec;
             
             limitedClock();
         }else{
-            //TODO playingTime dem GameOverlay hinzufÃ¼gen
+        	playingTime = new JLabel("00:00:00");
+        	playingTime.setBounds(1000-250, 0, 250, 25);
+        	overlay.add(playingTime);
             unlimitedClock();
         }
-        clock();
+        
     }
     
     //TODO Methode wird nach dem ersten Zug aufgerufen
@@ -45,6 +58,7 @@ public class Timer extends StopWatch{
             start();
             refreshTimer.scheduleAtFixedRate(refreshTask, 999, 999);
         }
+        nextColor();
     }
     
     private void unlimitedClock(){
@@ -53,7 +67,8 @@ public class Timer extends StopWatch{
             public void run() {
                 long currentTime = getTime(TimeUnit.SECONDS);
                 //TODO Text von playingTime wird auf time gesetzt
-                System.out.println(getTime_H_Min_Sek(currentTime));
+                playingTime.setText(getTime_H_Min_Sek(currentTime));
+                overlay.repaint();
             }
                 
         };
@@ -72,12 +87,16 @@ public class Timer extends StopWatch{
 					timeRemainingWhite = timeInSec - currentTime + startTime;
 				}else{
 					if(timeRemainingBlack==0){
-						timeUp(Constants.Color_WHITE);
+						timeUp(Constants.Color_BLACK);
 					}
 					timeRemainingBlack = timeInSec - currentTime + startTime;
 				}
                 //TODO Text von playingTime wird auf time gesetzt, bzw. auf die jeweiligen Label der Spieler
-                System.out.println("Spielzeit: "+getTime_H_Min_Sek(currentTime)+ "    Spielzeit weiï¿½:"+getTime_H_Min_Sek(timeRemainingWhite)+"    Spielzeit schwarz:"+getTime_H_Min_Sek(timeRemainingBlack));
+				playingTime.setText(getTime_H_Min_Sek(currentTime));
+				timeWhite.setText(getTime_H_Min_Sek(timeRemainingWhite));
+				timeBlack.setText(getTime_H_Min_Sek(timeRemainingBlack));
+				overlay.repaint();
+                //System.out.println("Spielzeit: "+getTime_H_Min_Sek(currentTime)+ "    Spielzeit weiï¿½:"+getTime_H_Min_Sek(timeRemainingWhite)+"    Spielzeit schwarz:"+getTime_H_Min_Sek(timeRemainingBlack));
 			}
 		};
     }
