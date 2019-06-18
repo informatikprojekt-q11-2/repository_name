@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="Supertolles Schachspiel/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="D:/Verschiedenes/eclipse/eclipse/plugins/commons-lang3-3.8.1/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="D:/Verschiedenes/eclipse/eclipse/plugins/lombok.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

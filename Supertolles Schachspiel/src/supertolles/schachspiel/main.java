@@ -5,6 +5,7 @@
  */
 package supertolles.schachspiel;
 
+import supertolles.schachspiel.gui.Game;
 import supertolles.schachspiel.test.Test_SearchPieces;
 import supertolles.schachspiel.test.Test_Timer;
 
@@ -18,8 +19,8 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new GameOptions();
-        
+        //new GameOptions();
+        new Game();
         //Aufruf von Testklassen
         //new Test_SearchPieces();
     	//new Test_Timer();

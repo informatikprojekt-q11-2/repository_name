@@ -25,6 +25,12 @@ public class Timer extends StopWatch{
     private GameOverlay overlay;
     private String currentColor=Constants.Color_WHITE;
     
+    /**
+     * 
+     * @param logic
+     * @param overlay
+     * @param timeInSec if <code>timeInSec = 0</code>, the game time won't be limited
+     */
     public Timer(GameLogic logic, GameOverlay overlay, long timeInSec){
         refreshTimer = new java.util.Timer();
     	this.overlay = overlay;
@@ -52,6 +58,9 @@ public class Timer extends StopWatch{
         
     }
     
+    /**
+     * Starts the Timer and changes the attribute <code>currentColor</code> after every move
+     */
     public void clock(){
         if(!isStarted()){
             start();
@@ -60,6 +69,9 @@ public class Timer extends StopWatch{
         nextColor();
     }
     
+    /**
+     * creates a TimerTask for the gamemode with unlimited time
+     */
     private void unlimitedClock(){
         refreshTask = new TimerTask(){
             @Override
@@ -73,6 +85,9 @@ public class Timer extends StopWatch{
         };
     }
     
+    /**
+     * creates a TimerTask for the gamemode with limited time
+     */
     private void limitedClock(){
     	refreshTask = new TimerTask() {
 			@Override
@@ -102,6 +117,9 @@ public class Timer extends StopWatch{
 		};
     }
     
+    /**
+     * sets the next color and the startTime of the current move
+     */
     public void nextColor(){
     	if(currentColor == Constants.Color_WHITE){
     		currentColor = Constants.Color_BLACK;
@@ -114,6 +132,10 @@ public class Timer extends StopWatch{
     	}
     }
     
+    /**
+     * Method used for canceling the game after one player's time is 0 
+     * @param color The color specifies which color's time is up
+     */
     private void timeUp(String color){
     	refreshTimer.cancel();
     	stop();
@@ -125,6 +147,11 @@ public class Timer extends StopWatch{
     	//TODO Spiel beenden
     }
     
+    /**
+     * 
+     * @param currentTime Time in seconds which should be formatted
+     * @return Returns a <code>String</code> formatted in HH:MM:SS
+     */
     private String getTime_H_Min_Sek(long currentTime){
     	long sek = currentTime%60;
         long min = currentTime / 60;

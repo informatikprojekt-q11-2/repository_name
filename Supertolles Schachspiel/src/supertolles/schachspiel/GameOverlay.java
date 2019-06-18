@@ -115,6 +115,22 @@ public class GameOverlay extends JPanel{
         
         takenPiecesWhite = new ArrayList<Piece>();
         takenPiecesBlack = new ArrayList<Piece>();
+        
+        
+        piecesWhite = new JPanel();
+        piecesWhite.setBounds(80*boardLength+80*2, 80*boardLength, 75*11, (int)(75*2.2));
+        piecesWhite.setLayout(null);
+        piecesWhite.setVisible(true);
+        piecesWhite.setBackground(Color.WHITE);
+        add(piecesWhite);
+        
+        piecesBlack = new JPanel();
+        piecesBlack.setBounds(80*boardLength+80*2, 80, 75*11, (int)(75*2.2));
+        piecesBlack.setLayout(null);
+        piecesBlack.setVisible(true);
+        piecesBlack.setBackground(Color.BLACK);
+        add(piecesBlack);
+        
         updateBoard();
     }
     
@@ -140,6 +156,13 @@ public class GameOverlay extends JPanel{
             }
             
             if(isMoveOption){
+            	if(logic.board[y][x] != null){
+            		if(logic.board[y][x].getColour() == Constants.Color_WHITE){
+            			takenPiecesWhite.add(logic.board[y][x]);
+            		}else{
+            			takenPiecesBlack.add(logic.board[y][x]);
+            		}
+            	}
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
                 timer.clock(); 
                 update();
@@ -293,9 +316,10 @@ public class GameOverlay extends JPanel{
     }
     
     /**
+     * The method adds a taken piece dependent on the parameters to a specific <code>JPanel</code> on the Overlay
      * @author Niklas
-     * @param type
-     * @param color
+     * @param type Type of the taken Piece
+     * @param color Color of the taken Piece
      */
     private void addTakenPieceToOverlay(String type, String color){
     	if(color == Constants.Color_BLACK){
@@ -356,6 +380,7 @@ public class GameOverlay extends JPanel{
     }
     
     /**
+     * The method updates the buttons of the board
      * @author Niklas
      */
     //TODO URL zu den Icons einfügen!!!!
