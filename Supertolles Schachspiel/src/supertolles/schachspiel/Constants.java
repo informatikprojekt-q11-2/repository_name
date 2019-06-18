@@ -30,4 +30,13 @@ public class Constants {
     //Colors
     public static final String Color_WHITE = "white";
     public static final String Color_BLACK = "black";
+    
+    //URL to Pieces
+    //Temp
+    public static final String Picture_TempPawn="/supertolles/schachspiel/Pictures/PawnTemp.png";
+    public static final String Picture_TempKnight="/supertolles/schachspiel/Pictures/KnightTemp.png";
+    public static final String Picture_TempBishop="/supertolles/schachspiel/Pictures/BishopTemp.png";
+    public static final String Picture_TempRook="/supertolles/schachspiel/Pictures/RookTemp.png";
+    public static final String Picture_TempQueen="/supertolles/schachspiel/Pictures/QueenTemp.png";
+    public static final String Picture_TempKing="/supertolles/schachspiel/Pictures/KingTemp.png";
 }

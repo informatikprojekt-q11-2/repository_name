@@ -82,11 +82,13 @@ public class Timer extends StopWatch{
 				if(currentColor == Constants.Color_WHITE){
 					if(timeRemainingWhite==0){
 						timeUp(Constants.Color_WHITE);
+						return;
 					}
 					timeRemainingWhite = timeInSec - currentTime + startTime;
 				}else{
 					if(timeRemainingBlack==0){
 						timeUp(Constants.Color_BLACK);
+						return;
 					}
 					timeRemainingBlack = timeInSec - currentTime + startTime;
 				}
@@ -115,6 +117,11 @@ public class Timer extends StopWatch{
     private void timeUp(String color){
     	refreshTimer.cancel();
     	stop();
+    	if(color==Constants.Color_WHITE){
+    		System.out.println("Schwarz hat gewonnen!");
+    	}else{
+    		System.out.println("Weiﬂ hat gewonnen!");
+    	}
     	//TODO Spiel beenden
     }
     
