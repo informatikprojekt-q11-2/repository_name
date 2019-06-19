@@ -119,15 +119,16 @@ public class GameOptions {
         			h=0;
         		}
     			try{
-        			min = Integer.parseInt(str[0]);
+        			min = Integer.parseInt(str[1]);
         		}catch(Exception e){
         			min=0;
         		}
     			try{
-        			sek = Integer.parseInt(str[0]);
+        			sek = Integer.parseInt(str[2]);
         		}catch(Exception e){
         			sek=0;
         		}
+    			System.out.println(sek+ min*60 + h*3600);
     			return sek+ min*60 + h*3600;
     			
     		}else{
@@ -139,7 +140,7 @@ public class GameOptions {
             			h=0;
             		}
         			try{
-            			min = Integer.parseInt(str[0]);
+            			min = Integer.parseInt(str[1]);
             		}catch(Exception e){
             			min=0;
             		}

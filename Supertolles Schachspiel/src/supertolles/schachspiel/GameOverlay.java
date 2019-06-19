@@ -6,18 +6,25 @@
 package supertolles.schachspiel;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+
+import javafx.scene.transform.Scale;
 
 /**
  *
@@ -292,6 +299,12 @@ public class GameOverlay extends JPanel{
     	}
     	
     	//Update von der Anzeige der geschlagenen Figuren
+    	for(int i=0; i<piecesWhite.getComponentCount();i++){
+    		piecesWhite.remove(i);
+    	}
+    	for(int i=0; i<piecesBlack.getComponentCount();i++){
+    		piecesBlack.remove(i);
+    	}
     	for(int i=0; i< takenPieces.size(); i++){
     		if(takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i])<0){
     			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j < 0; j++){
@@ -327,22 +340,22 @@ public class GameOverlay extends JPanel{
     		//TODO URL zu Bildern einfügen
     		switch(type){
     		case Constants.PAWN:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempPawn));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
     			break;
     		case Constants.KNIGHT:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKnight));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight));
     			break;
     		case Constants.BISHOP:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempBishop));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop));
     			break;
     		case Constants.ROOK:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempRook));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook));
     			break;
     		case Constants.QUEEN:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempQueen));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen));
     			break;
     		case Constants.KING:
-    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKing));
+    			whiteIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKing));
     			break;
     		}
     		JLabel whitePiece = new JLabel(whiteIcon);
@@ -354,22 +367,22 @@ public class GameOverlay extends JPanel{
     		//TODO URL zu Bildern einfügen
     		switch(type){
     		case Constants.PAWN:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempPawn));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
     			break;
     		case Constants.KNIGHT:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKnight));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight));
     			break;
     		case Constants.BISHOP:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempBishop));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop));
     			break;
     		case Constants.ROOK:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempRook));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook));
     			break;
     		case Constants.QUEEN:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempQueen));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen));
     			break;
     		case Constants.KING:
-    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKing));
+    			blackIcon = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKing));
     			break;
     		}
     		JLabel blackPiece = new JLabel(blackIcon);
@@ -385,55 +398,72 @@ public class GameOverlay extends JPanel{
      */
     //TODO URL zu den Icons einfügen!!!!
     void updateBoard(){
+    	BufferedImage skin = null;
     	for(int y = 0 ; y < board.length; y++){
     		for(int x = 0 ; x < board.length; x++){
         		Piece temp = logic.board[y][x];
         		if(temp != null){
+        			try{
         			switch(temp.getColour()){
         			case Constants.Color_WHITE:
         				switch(temp.getType()){
             			case Constants.PAWN:
-            				board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempPawn)));
+            				skin =ImageIO.read(new File(Constants.Picture_WhitePawn));
+            				board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.KNIGHT:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKnight)));
+                			skin =ImageIO.read(new File(Constants.Picture_WhiteKnight));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.BISHOP:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempBishop)));
+                			skin =ImageIO.read(new File(Constants.Picture_WhiteBishop));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.ROOK:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempRook)));
+                			skin =ImageIO.read(new File(Constants.Picture_WhiteRook));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.QUEEN:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempQueen)));
+                			skin =ImageIO.read(new File(Constants.Picture_WhiteQueen));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.KING:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKing)));
+                			skin =ImageIO.read(new File(Constants.Picture_WhiteKing));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
             			}
         				break;
         			case Constants.Color_BLACK:
         				switch(temp.getType()){
         				case Constants.PAWN:
-            				board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempPawn)));
+        					skin =ImageIO.read(new File(Constants.Picture_BlackPawn));
+            				board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.KNIGHT:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKnight)));
+                			skin =ImageIO.read(new File(Constants.Picture_BlackKnight));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.BISHOP:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempBishop)));
+                			skin =ImageIO.read(new File(Constants.Picture_BlackBishop));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.ROOK:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempRook)));
+                			skin =ImageIO.read(new File(Constants.Picture_BlackRook));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.QUEEN:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempQueen)));
+                			skin =ImageIO.read(new File(Constants.Picture_BlackQueen));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
                 		case Constants.KING:
-                			board[y][x].setIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_TempKing)));
+                			skin =ImageIO.read(new File(Constants.Picture_BlackKing));
+                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
                 			break;
             			}
         				break;
+        			}
+        			}catch(IOException e){
+        				e.printStackTrace();
         			}
         		}else{
         			board[y][x].setIcon(null);

@@ -36,9 +36,9 @@ public class Timer extends StopWatch{
     	this.overlay = overlay;
         if(timeInSec > 0){
             //TODO  Größen anpassen
-        	timeWhite = new JLabel("-1");
+        	timeWhite = new JLabel(getTime_H_Min_Sek(timeInSec));
         	timeWhite.setBounds(1000-250, 25, 250, 25);
-        	timeBlack = new JLabel("-1");
+        	timeBlack = new JLabel(getTime_H_Min_Sek(timeInSec));
         	timeBlack.setBounds(1000-250, 50, 250, 25);
         	playingTime = new JLabel("00:00:00");
         	playingTime.setBounds(1000-250, 0, 250, 25);
