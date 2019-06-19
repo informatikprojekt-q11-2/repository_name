@@ -472,6 +472,10 @@ public class GameOverlay extends JPanel{
     	repaint();
     }
     
+    /**
+     * creates scaled ImageIcons for the buttons on the board
+     * @author Niklas
+     */
     private void createScaledImages(){
     	ImageIcon img;
     	if(board.length==8){
@@ -508,6 +512,11 @@ public class GameOverlay extends JPanel{
     	}
     }
     
+    /**
+     * @author Niklas
+     * @param reason Reason why the game is over
+     * @param color The winner of the game. if reason is <code>Constants.Reason_StaleMate</code> it is not necessary to specify a color
+     */
     public void gameOver(int reason, String color){
     	for(int i=0; i<board.length;i++){
     		for(int j = 0;j<board.length;j++ ){

@@ -82,6 +82,7 @@ public class GameLogic {
     }
     
     /**
+     * Flips the board[][] 180°
      * @author Niklas
      */
     void flipBoard(){
@@ -100,7 +101,11 @@ public class GameLogic {
     }
     
     /**
+     * Moves a piece in board[][] from (currentCoordinate[0], currentCoordinate[1]) to (x,y)
      * @author Niklas
+     * @param currentCoordinate The coordinate of the piece which should be moved
+     * @param x The x-coordinate where the 
+     * @param y
      */
     public void movePiece(int[] currentCoordinate, int x, int y){
         if(!board[currentCoordinate[1]][currentCoordinate[0]].getMoved()){
@@ -111,8 +116,11 @@ public class GameLogic {
         board[y][x].setCoordinates(x, y);
     }
     
+    /**
+     * Checks the winning conditions of the game and ends it if necessary
+     * @author Niklas
+     */
     void checkWinConditions(){
-    	System.out.println(game.gamestate);
         if(isCheckMate()){
         	if(game.gamestate == Constants.BLACK_TO_MOVE || game.gamestate == Constants.BLACK_TO_SELECT){
         		game.gameOver(Constants.Reason_CheckMate, Constants.Color_WHITE);
@@ -127,7 +135,9 @@ public class GameLogic {
     }
     
     /**
+     * Checks, if a players king is standing in check mate
      * @author Niklas
+     * @return Returns true, if a players king is standing in check mate
      */
     public boolean isCheckMate(){
         if(isCheck(getKingCoordinatesCurrentTurn()[0], getKingCoordinatesCurrentTurn()[1]) 
@@ -151,7 +161,10 @@ public class GameLogic {
     }
     
     /**
-     * @author Niklas
+     * Checks if a figure (x,y) is threatened by another figure
+     * @param x x-coordinate of the investigated figure
+     * @param y y-coordinate of the investigated figure
+     * @return Returns true if the investigated figure is threatened
      */
     public boolean isCheck(int x, int y){
         if(searchThreatFigure(x, y).length > 0){
@@ -161,7 +174,9 @@ public class GameLogic {
     }
     
     /**
+     * Checks if the game result is stale mate
      * @author Niklas
+     * @return Returns true, if the game result is stale mate
      */
     public boolean isStaleMate(){
         for(int y=0; y<boardlength ; y++){
@@ -257,14 +272,14 @@ public class GameLogic {
         }
         
         piece.setCoordinates(xActually, yActually);
-        //board[yActually][xActually] = piece;
         return arrayListToArray(figures);
     }
     
     /**
+     * Searches knights which are able to move to (x,y)
      * @author Niklas
-     * @param x
-     * @param y
+     * @param x X-Coordinate of the investigated figure
+     * @param y Y-Coordinate of the investigated figure
      * @return Returns all Knights which are threatening the figure with coordinates (x,y)
      */
     public Piece[] searchKnight(int x, int y, Piece[][] board){
@@ -317,7 +332,11 @@ public class GameLogic {
     }
     
     /**
+     * Searches figures which are able to move on straights towards (x,y)
      * @author Niklas
+     * @param x X-Coordinate of the investigated figure
+     * @param y Y-Coordinate of the investigated figure
+     * @return Returns all figures which are threatening the figure with coordinates (x,y)
      */
     public Piece[] searchStraights(int x, int y, Piece[][] board){
         ArrayList<Piece> figures = new ArrayList<Piece>();
@@ -361,7 +380,14 @@ public class GameLogic {
         
         return arrayListToArray(figures);
     }
-
+    
+    /**
+     * Searches figures which are able to move diagonal towards (x,y)
+     * @author Niklas
+     * @param x X-Coordinate of the investigated figure
+     * @param y Y-Coordinate of the investigated figure
+     * @return Returns all figures which are threatening the figure with coordinates (x,y)
+     */
     public Piece[] searchDiagonals(int x, int y, Piece[][] board){
     	ArrayList<Piece> figures = new ArrayList<Piece>();
     	int x1, y1, sideDistance;
@@ -441,7 +467,10 @@ public class GameLogic {
     }
     
     /**
+     * Converts an array <code>ArrayList (Piece)</code> to <code>Piece[]</code>
      * @author Niklas
+     * @param arrayList ArrayList which should be converted
+     * @return Returns an Array 
      */
     public static Piece[] arrayListToArray(ArrayList<Piece> arrayList){
         Piece[] temp = new Piece[arrayList.size()];
@@ -1027,9 +1056,12 @@ public class GameLogic {
         return (0 <= x && x < boardlength && 0 <= y && y < boardlength);
     }
     
+    /**
+     * prepares the GameLogic for the next move 
+     * @author Niklas
+     */
     public void nextMove(){
     	flipBoard();
-    	System.out.println("methode aufgerufen");
     	checkWinConditions();
     }
     

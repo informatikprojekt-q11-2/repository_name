@@ -26,6 +26,10 @@ public class Options {
 	private JButton accept, toDefault, mainmenu;
 	private Cursor cursor;
 
+	/**
+	 * @author Niklas
+	 * @param g
+	 */
 	public Options(Game g) {
 		gOp = g.getOptions();
 	}

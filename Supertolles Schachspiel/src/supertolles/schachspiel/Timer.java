@@ -26,7 +26,7 @@ public class Timer extends StopWatch{
     private String currentColor=Constants.Color_WHITE;
     
     /**
-     * 
+     * @author Niklas
      * @param logic
      * @param overlay
      * @param timeInSec if <code>timeInSec = 0</code>, the game time won't be limited
@@ -59,7 +59,9 @@ public class Timer extends StopWatch{
     }
     
     /**
+     * 
      * Starts the Timer and changes the attribute <code>currentColor</code> after every move
+     * @author Niklas
      */
     public void clock(){
         if(!isStarted()){
@@ -71,13 +73,13 @@ public class Timer extends StopWatch{
     
     /**
      * creates a TimerTask for the gamemode with unlimited time
+     * @author Niklas
      */
     private void unlimitedClock(){
         refreshTask = new TimerTask(){
             @Override
             public void run() {
                 long currentTime = getTime(TimeUnit.SECONDS);
-                //TODO Text von playingTime wird auf time gesetzt 
                 playingTime.setText(getTime_H_Min_Sek(currentTime));
                 overlay.repaint();
             }
@@ -87,6 +89,7 @@ public class Timer extends StopWatch{
     
     /**
      * creates a TimerTask for the gamemode with limited time
+     * @author Niklas
      */
     private void limitedClock(){
     	refreshTask = new TimerTask() {
@@ -107,7 +110,6 @@ public class Timer extends StopWatch{
 					}
 					timeRemainingBlack = timeInSec - currentTime + startTime;
 				}
-                //TODO Text von playingTime wird auf time gesetzt, bzw. auf die jeweiligen Label der Spieler
 				playingTime.setText(getTime_H_Min_Sek(currentTime));
 				timeWhite.setText(getTime_H_Min_Sek(timeRemainingWhite));
 				timeBlack.setText(getTime_H_Min_Sek(timeRemainingBlack));
@@ -119,6 +121,7 @@ public class Timer extends StopWatch{
     
     /**
      * sets the next color and the startTime of the current move
+     * @author Niklas
      */
     public void nextColor(){
     	if(currentColor == Constants.Color_WHITE){
@@ -134,6 +137,7 @@ public class Timer extends StopWatch{
     
     /**
      * Method used for canceling the game after one player's time is 0 
+     * @author Niklas
      * @param color The color specifies which color's time is up
      */
     private void timeUp(String color){
@@ -146,11 +150,10 @@ public class Timer extends StopWatch{
     		System.out.println("Weiﬂ hat gewonnen!");
     		overlay.gameOver(Constants.Reason_TimeUp, Constants.Color_WHITE);
     	}
-    	//TODO Spiel beenden
     }
     
     /**
-     * 
+     * @author Niklas
      * @param currentTime Time in seconds which should be formatted
      * @return Returns a <code>String</code> formatted in HH:MM:SS
      */

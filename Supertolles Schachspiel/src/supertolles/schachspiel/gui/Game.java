@@ -19,6 +19,7 @@ public class Game extends JFrame {
 	private Options opt;
 
 	/**
+	 * @author Niklas
 	 * Create the frame.
 	 */
 	public Game() {

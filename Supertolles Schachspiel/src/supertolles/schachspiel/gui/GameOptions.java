@@ -29,6 +29,10 @@ public class GameOptions {
 	private Dimension[] resolutions= new Dimension[]{new Dimension(1280, 720)
 			,new Dimension(1920, 1080), new Dimension(2560, 1440), new Dimension(3840, 2160)};
 
+	/**
+	 * @author Niklas
+	 * @param g
+	 */
 	public GameOptions(Game g) {
 		readData();
 		reloadFrame(g);

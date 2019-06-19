@@ -13,6 +13,10 @@ public class Mainmenu {
 	private JPanel mainmenuOverlay;
 	private Cursor cursor;
 
+	/**
+	 * @author Niklas
+	 * @param g
+	 */
 	public Mainmenu(Game g) {
 	}
 
