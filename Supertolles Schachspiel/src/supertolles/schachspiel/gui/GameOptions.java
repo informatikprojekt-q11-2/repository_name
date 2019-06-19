@@ -24,7 +24,7 @@ import lombok.Setter;
 public class GameOptions {
 	private Dimension resolution, maxResolution;
 	private boolean fullScreen;
-	private URL path = GameOptions.class.getResource("/supertolles/schachspiel/gui/settings.conf");
+	private String path = ".";
 	private int volume;
 	private Dimension[] resolutions= new Dimension[]{new Dimension(1280, 720)
 			,new Dimension(1920, 1080), new Dimension(2560, 1440), new Dimension(3840, 2160)};
@@ -35,10 +35,11 @@ public class GameOptions {
 	}
 	
 	private void readData(){
-		File datei = new File(path.getPath());
+		File datei = new File(path+"/settings.conf");
 		BufferedReader in = null;
 		if (!datei.exists()) {
 		    try {
+		    	System.out.println(path+"/settings.conf");
 			datei.createNewFile();
 			setDefaultSettings();
 		    } catch (IOException ex) {
@@ -47,7 +48,7 @@ public class GameOptions {
 		} else {
 		    String zeileninhalt;
 		    try {
-			in = new BufferedReader(new FileReader(path.getPath()));
+			in = new BufferedReader(new FileReader(path+"/settings.conf"));
 			while ((zeileninhalt = in.readLine()) != null) {
 			    parseSettings(zeileninhalt);
 			}
@@ -68,7 +69,7 @@ public class GameOptions {
 	public void setDefaultSettings(){
 		BufferedWriter output=null;
 		try {
-			output = new BufferedWriter(new FileWriter(path.getPath()));
+			output = new BufferedWriter(new FileWriter(path+"/settings.conf"));
 			output.write("?fs:"+true);
 			output.newLine();
 			output.write("Resdim:"+Toolkit.getDefaultToolkit().getScreenSize());
@@ -197,7 +198,7 @@ public class GameOptions {
 		volume = g.getOpt().getVolume().getValue();
 		BufferedWriter output=null;
 		try {
-			output = new BufferedWriter(new FileWriter(path.getPath()));
+			output = new BufferedWriter(new FileWriter(path+"/settings.conf"));
 			output.write("?fs:"+false);
 			output.newLine();
 			output.write("Resdim:"+resolution);
