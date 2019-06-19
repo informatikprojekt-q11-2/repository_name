@@ -27,6 +27,8 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     *  sets all of the pieces in the standard startposition of chess
      */
     public void startPosition(){
         board[0][0] = new Piece(0, 0, Constants.Color_BLACK, Constants.ROOK);
@@ -54,6 +56,11 @@ public class GameLogic {
         }   
     }
     
+    /**
+     *  @author Alexander
+     * 
+     *  prints the board out in the console
+     */
     public void printBoard(){
         for (int i = 0; i < boardlength; i++) {
             System.out.print("       " + i + "       "); 
@@ -446,6 +453,16 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     * computes the MoveOptions of a oiece standing on the field(x/y) 
+     * this methode takes pins and check into account
+     * 
+     * @param x: x-Coordinate of the field
+     * @param y: y-Coordinate of the field
+     * @return integer ArrayList of all the available fields to move on
+     *  index 0: x-Coordinate of the available field
+     *  index 1: y-Coordinate of the available field
+     *  index 2: integer to indicate if this field houses a piece that can be taken
      */
     public ArrayList<Integer[]> computeMoveOptions(int x, int y){
         ArrayList<Integer[]> generalMovement = new ArrayList<Integer[]>();
@@ -537,6 +554,14 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     *  computes possible restriction of moveoptions because of check
+     *  there has to be a piece standing on the given field
+     * 
+     *  @param x: the x coordinate of the field that schould be tested
+     *  @param y: the y coordinate of the field that schould be tested
+     *  @return a 2-Dimensional boolean-Array with the size of the board that marks available moveoptions in case of check with true
+     *          if the king is not in check the array is completely filled with true
      */
     public boolean[][] computeCheckRestrictions(Piece threat){
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
@@ -556,6 +581,14 @@ public class GameLogic {
     
     /**
      * @author Alexander
+     * 
+     *  computes possible restriction of moveoptions because of a pin 
+     *  there has to be a piece standing on the given field
+     * 
+     *  @param x: the x coordinate of the field that schould be tested
+     *  @param y: the y coordinate of the field that schould be tested
+     *  @return a 2-Dimensional boolean-Array with the size of the board that marks available moveoptions in case of a pin with true
+     *          if the figure on the space (x/y) is not in a pin the whole array will be true
      */
     public boolean[][] computePinRestrictions(int x, int y){
         int xk = getKingCoordinatesCurrentTurn()[0], yk =getKingCoordinatesCurrentTurn()[1];
