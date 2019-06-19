@@ -33,28 +33,28 @@ public class Constants {
     
     //URL to Pieces
     //Temp
-    public static final String Picture_TempPawn="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/PawnTemp.png";
-    public static final String Picture_TempKnight="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KnightTemp.png";
-    public static final String Picture_TempBishop="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/BishopTemp.png";
-    public static final String Picture_TempRook="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/RookTemp.png";
-    public static final String Picture_TempQueen="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/QueenTemp.png";
-    public static final String Picture_TempKing="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KingTemp.png";
+    public static final String Picture_TempPawn="/supertolles/schachspiel/Pictures/PawnTemp.png";
+    public static final String Picture_TempKnight="/supertolles/schachspiel/Pictures/KnightTemp.png";
+    public static final String Picture_TempBishop="/supertolles/schachspiel/Pictures/BishopTemp.png";
+    public static final String Picture_TempRook="/supertolles/schachspiel/Pictures/RookTemp.png";
+    public static final String Picture_TempQueen="/supertolles/schachspiel/Pictures/QueenTemp.png";
+    public static final String Picture_TempKing="/supertolles/schachspiel/Pictures/KingTemp.png";
     
     //final Piece skins
-    public static final String Picture_WhitePawn="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/PawnW.png";
-    public static final String Picture_BlackPawn="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/PawnB.png";
-    public static final String Picture_WhiteKnight="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KnightW.png";
-    public static final String Picture_BlackKnight="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KnightB.png";
-    public static final String Picture_WhiteBishop="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/BishopW.png";
-    public static final String Picture_BlackBishop="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/BishopB.png";
-    public static final String Picture_WhiteRook="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/RookW.png";
-    public static final String Picture_BlackRook="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/RookB.png";
-    public static final String Picture_WhiteQueen="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/QueenW.png";
-    public static final String Picture_BlackQueen="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/QueenB.png";
-    public static final String Picture_WhiteKing="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KingW.png";
-    public static final String Picture_BlackKing="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/KingB.png";
+    public static final String Picture_WhitePawn="/supertolles/schachspiel/Pictures/PawnW.png";
+    public static final String Picture_BlackPawn="/supertolles/schachspiel/Pictures/PawnB.png";
+    public static final String Picture_WhiteKnight="/supertolles/schachspiel/Pictures/KnightW.png";
+    public static final String Picture_BlackKnight="/supertolles/schachspiel/Pictures/KnightB.png";
+    public static final String Picture_WhiteBishop="/supertolles/schachspiel/Pictures/BishopW.png";
+    public static final String Picture_BlackBishop="/supertolles/schachspiel/Pictures/BishopB.png";
+    public static final String Picture_WhiteRook="/supertolles/schachspiel/Pictures/RookW.png";
+    public static final String Picture_BlackRook="/supertolles/schachspiel/Pictures/RookB.png";
+    public static final String Picture_WhiteQueen="/supertolles/schachspiel/Pictures/QueenW.png";
+    public static final String Picture_BlackQueen="/supertolles/schachspiel/Pictures/QueenB.png";
+    public static final String Picture_WhiteKing="/supertolles/schachspiel/Pictures/KingW.png";
+    public static final String Picture_BlackKing="/supertolles/schachspiel/Pictures/KingB.png";
     //optional
-    public static final String Picture_WhiteCaesar="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/CaesarW.png";
-    public static final String Picture_BlackCaesar="./Supertolles Schachspiel/src/supertolles/schachspiel/Pictures/CaesarB.png";
+    public static final String Picture_WhiteCaesar="/supertolles/schachspiel/Pictures/CaesarW.png";
+    public static final String Picture_BlackCaesar="/supertolles/schachspiel/Pictures/CaesarB.png";
     
 }

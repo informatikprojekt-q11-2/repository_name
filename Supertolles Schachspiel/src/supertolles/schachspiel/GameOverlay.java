@@ -11,9 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -398,73 +395,87 @@ public class GameOverlay extends JPanel{
      */
     //TODO URL zu den Icons einfügen!!!!
     void updateBoard(){
-    	BufferedImage skin = null;
+    	ImageIcon skin = null;
+    	Image scaled = null;
     	for(int y = 0 ; y < board.length; y++){
     		for(int x = 0 ; x < board.length; x++){
         		Piece temp = logic.board[y][x];
         		if(temp != null){
-        			try{
         			switch(temp.getColour()){
         			case Constants.Color_WHITE:
         				switch(temp.getType()){
             			case Constants.PAWN:
-            				skin =ImageIO.read(new File(Constants.Picture_WhitePawn));
-            				board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
+            				skin = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
+            				scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);
                 			break;
                 		case Constants.KNIGHT:
-                			skin =ImageIO.read(new File(Constants.Picture_WhiteKnight));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);
                 			break;
                 		case Constants.BISHOP:
-                			skin =ImageIO.read(new File(Constants.Picture_WhiteBishop));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);
                 			break;
                 		case Constants.ROOK:
-                			skin =ImageIO.read(new File(Constants.Picture_WhiteRook));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);
                 			break;
                 		case Constants.QUEEN:
-                			skin =ImageIO.read(new File(Constants.Picture_WhiteQueen));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.KING:
-                			skin =ImageIO.read(new File(Constants.Picture_WhiteKing));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKing));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
             			}
         				break;
         			case Constants.Color_BLACK:
         				switch(temp.getType()){
         				case Constants.PAWN:
-        					skin =ImageIO.read(new File(Constants.Picture_BlackPawn));
-            				board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+        					skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.KNIGHT:
-                			skin =ImageIO.read(new File(Constants.Picture_BlackKnight));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.BISHOP:
-                			skin =ImageIO.read(new File(Constants.Picture_BlackBishop));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.ROOK:
-                			skin =ImageIO.read(new File(Constants.Picture_BlackRook));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.QUEEN:
-                			skin =ImageIO.read(new File(Constants.Picture_BlackQueen));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
                 		case Constants.KING:
-                			skin =ImageIO.read(new File(Constants.Picture_BlackKing));
-                			board[y][x].setIcon(new ImageIcon(skin.getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT)));
-                			break;
+                			skin =new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKing));
+                			scaled = skin.getImage().getScaledInstance(board[y][x].getWidth(), board[y][x].getHeight(), Image.SCALE_DEFAULT);
+            				skin.setImage(scaled);
+            				board[y][x].setIcon(skin);break;
             			}
         				break;
         			}
-        			}catch(IOException e){
-        				e.printStackTrace();
-        			}
+
         		}else{
         			board[y][x].setIcon(null);
         		}
