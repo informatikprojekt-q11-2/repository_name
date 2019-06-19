@@ -3,9 +3,13 @@ package supertolles.schachspiel.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import supertolles.schachspiel.Constants;
+import supertolles.schachspiel.GameOverlay;
 
 public class Game extends JFrame {
 	private JPanel contentPane;
@@ -31,6 +35,7 @@ public class Game extends JFrame {
 		contentPane.setLayout(null);
 		mainmenu.enableMainmenu(this);
 		repaint();
+		setIconImage(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen)).getImage());
 		contentPane.repaint();
 	}
 	

@@ -57,4 +57,11 @@ public class Constants {
     public static final String Picture_WhiteCaesar="/supertolles/schachspiel/Pictures/CaesarW.png";
     public static final String Picture_BlackCaesar="/supertolles/schachspiel/Pictures/CaesarB.png";
     
+    
+    //win reasons
+    public static final int Reason_Surrender = 0;
+    public static final int Reason_CheckMate = 1;
+    public static final int Reason_StaleMate = 2;
+    public static final int Reason_TimeUp = 3;
+    
 }

@@ -141,8 +141,10 @@ public class Timer extends StopWatch{
     	stop();
     	if(color==Constants.Color_WHITE){
     		System.out.println("Schwarz hat gewonnen!");
+    		overlay.gameOver(Constants.Reason_TimeUp, Constants.Color_BLACK);
     	}else{
     		System.out.println("Weiﬂ hat gewonnen!");
+    		overlay.gameOver(Constants.Reason_TimeUp, Constants.Color_WHITE);
     	}
     	//TODO Spiel beenden
     }

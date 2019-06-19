@@ -23,7 +23,6 @@ public class GameLogic {
         game = g;
         
         startPosition();
-        printBoard();
     }
     
     /**
@@ -106,11 +105,16 @@ public class GameLogic {
     }
     
     void checkWinConditions(){
+    	System.out.println(game.gamestate);
         if(isCheckMate()){
-        	System.out.println("Ein Spieler steht Schachmatt.");
+        	if(game.gamestate == Constants.BLACK_TO_MOVE || game.gamestate == Constants.BLACK_TO_SELECT){
+        		game.gameOver(Constants.Reason_CheckMate, Constants.Color_WHITE);
+        	}else{
+        		game.gameOver(Constants.Reason_CheckMate, Constants.Color_BLACK);
+        	}
         }else{
         	if(isStaleMate()){
-        		System.out.println("Ein Spieler steht im Patt. Unentschieden!");
+        		game.gameOver(Constants.Reason_StaleMate, "");
         	}
         }
     }
@@ -380,10 +384,10 @@ public class GameLogic {
     		y1++;
     	}
     	
-    	if(sideDistance-x >= y){
+    	if(boardlength-x >= y){
     		sideDistance = y;
     	}else{
-    		sideDistance = sideDistance-x;
+    		sideDistance = boardlength-1-x;
     	}
     	
     	x1 = x + sideDistance;
@@ -406,7 +410,6 @@ public class GameLogic {
     		x1--;
     		y1++;
     	}
-    	
     	for(int i=0; i<figures.size(); i++){
     		if(!((figures.get(i).getType() == Constants.QUEEN || figures.get(i).getType() == Constants.BISHOP) 
     				&& board[y][x].getColour() != figures.get(i).getColour())){
@@ -416,7 +419,6 @@ public class GameLogic {
                     }
     		}
     	}
-    	
     	return arrayListToArray(figures);
     }
     
@@ -578,9 +580,9 @@ public class GameLogic {
                     int yPinPiece = y+((pinRestrictions.size()+1)*yDirection);
                     
                     if(isInBounds(xPinPiece, yPinPiece)){
-                    	 if(((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
+                    	 if((((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
                                  (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
-                                 (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN)){
+                                 (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN))&&board[yPinPiece][xPinPiece].getColour() != board[y][x].getColour()){
                                       pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
                                       for (int i = 0; i < pinRestrictions.size(); i++) {
                                           possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
@@ -764,7 +766,6 @@ public class GameLogic {
      */
     public ArrayList<Integer[]> computeKingMovement(int x, int y){
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
-        
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 if(isInBounds(x+j, y+i)){
@@ -995,6 +996,7 @@ public class GameLogic {
     
     public void nextMove(){
     	flipBoard();
+    	System.out.println("methode aufgerufen");
     	checkWinConditions();
     }
     
