@@ -82,7 +82,7 @@ public class GameLogic {
     }
     
     /**
-     * Flips the board[][] 180°
+     * Flips the board[][] 180ï¿½
      * @author Niklas
      */
     void flipBoard(){
@@ -417,7 +417,7 @@ public class GameLogic {
     		y1++;
     	}
     	
-    	if(boardlength-x >= y){
+    	if(boardlength-1-x >= y){
     		sideDistance = y;
     	}else{
     		sideDistance = boardlength-1-x;
