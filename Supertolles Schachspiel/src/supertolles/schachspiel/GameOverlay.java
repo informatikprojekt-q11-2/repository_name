@@ -73,9 +73,9 @@ public class GameOverlay extends JPanel{
             for(int x = 0; x < boardLength; x++){
                 ChessButton button = new ChessButton(x, y);
                 if((x+y)%2 == 0){
-                    button.setBackground(Color.WHITE);
+                    button.setBackground(new Color(243, 234, 226));
                 }else{
-                    button.setBackground(Color.BLACK);
+                    button.setBackground(new Color(183, 123, 79));
                 }
                 
                 button.setBounds(x*buttonHeight, y*buttonHeight, buttonHeight, buttonHeight);
@@ -88,7 +88,7 @@ public class GameOverlay extends JPanel{
 					}
 					@Override
 					public void mousePressed(MouseEvent e) {
-						UIManager.put("Button.select", (((button.getBoardCoordinates())[0]+(button.getBoardCoordinates())[1])%2 == 0) ? Color.WHITE:Color.BLACK);
+						UIManager.put("Button.select", (((button.getBoardCoordinates())[0]+(button.getBoardCoordinates())[1])%2 == 0) ? new Color(243, 234, 226):new Color(183, 123, 79));
 					}
 					@Override
 					public void mouseReleased(MouseEvent e) {
@@ -174,10 +174,10 @@ public class GameOverlay extends JPanel{
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
                     if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
-                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.WHITE);
+                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
                     }
                     else{
-                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.BLACK);
+                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
                     }
                 }
                 
@@ -193,10 +193,10 @@ public class GameOverlay extends JPanel{
                    ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_BLACK)){
                 	for(int i = 0; i<currentMoveOptions.size();i++){
                          if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
-                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.WHITE);
+                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
                          }
                          else{
-                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(Color.BLACK);
+                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
                          }
                     }
                     currentMoveOptions = logic.computeMoveOptions(x,y);
@@ -338,7 +338,7 @@ public class GameOverlay extends JPanel{
     	ImageIcon img;
     	if(color == Constants.Color_BLACK){
     		ImageIcon whiteIcon=null;
-    		//TODO URL zu Bildern einfügen
+    		//TODO URL zu Bildern einfï¿½gen
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
@@ -366,12 +366,12 @@ public class GameOverlay extends JPanel{
     			break;
     		}
     		JLabel whitePiece = new JLabel(whiteIcon);
-    		//TODO Größe anpassen
+    		//TODO Grï¿½ï¿½e anpassen
     		whitePiece.setBounds(75*piecesWhite.getComponentCount(), 75*(piecesWhite.getComponentCount()/10), 75, 75);
     		piecesWhite.add(whitePiece);
     	}else{
     		ImageIcon blackIcon=null;
-    		//TODO URL zu Bildern einfügen
+    		//TODO URL zu Bildern einfï¿½gen
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
@@ -399,7 +399,7 @@ public class GameOverlay extends JPanel{
     			break;
     		}
     		JLabel blackPiece = new JLabel(blackIcon);
-    		//TODO Größe anpassen
+    		//TODO Grï¿½ï¿½e anpassen
     		blackPiece.setBounds(75*piecesBlack.getComponentCount(), 75*(piecesBlack.getComponentCount()/10), 75, 75);
     		piecesBlack.add(blackPiece);
     	}
@@ -409,7 +409,7 @@ public class GameOverlay extends JPanel{
      * The method updates the buttons of the board
      * @author Niklas
      */
-    //TODO URL zu den Icons einfügen!!!!
+    //TODO URL zu den Icons einfï¿½gen!!!!
     void updateBoard(){
     	ImageIcon skin = null;
     	Image scaled = null;
@@ -507,7 +507,7 @@ public class GameOverlay extends JPanel{
         	skins[1][5]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
         	
     	}else{
-    		//TODO falls eine weitere Figur eingefügt wederden soll, hier einfügen.
+    		//TODO falls eine weitere Figur eingefï¿½gt wederden soll, hier einfï¿½gen.
     		throw new IllegalArgumentException();
     	}
     }
