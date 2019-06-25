@@ -155,8 +155,13 @@ public class Options {
 				list.add(g.getResolutions()[2].getWidth()+"x"+g.getResolutions()[2].getHeight());
 				break;
 			default:
-				if(Toolkit.getDefaultToolkit().getScreenSize().getHeight()<720){
-					throw new IllegalStateException();
+				if(Toolkit.getDefaultToolkit().getScreenSize().getHeight()<720 && Toolkit.getDefaultToolkit().getScreenSize().getWidth()<1280){
+					try {
+						throw new ResolutionWarning("The resolution of the used screen is not supported by this program! Please notice, that this software won't optimize the displayed content! This could lead to unresolvable issues.");
+					} catch (ResolutionWarning e) {
+						e.printStackTrace();
+					}
+					list.add(g.getMaxResolution().getWidth()+"x"+g.getMaxResolution().getHeight());
 				}else{
 					if(Toolkit.getDefaultToolkit().getScreenSize().getHeight()<1080){
 						list.add(g.getResolutions()[0].getWidth()+"x"+g.getResolutions()[0].getHeight());
@@ -187,18 +192,24 @@ public class Options {
 		resBox.setBounds(res.getX()+res.getWidth(), res.getY()+res.getHeight()/5, optionOverlay.getWidth()/9, optionOverlay.getHeight()/25);
 		resBox.setFont(new Font("Tahoma", Font.PLAIN, (int) (resBox.getHeight()*0.4)));
 		resBox.setFocusable(false);
-		if((gOp.getResolution()+"").contains("720")){
-			resBox.setSelectedIndex(0);
-		}else{
-			if((gOp.getResolution()+"").contains("1080")){
-				resBox.setSelectedIndex(1);
+		try{
+			if((gOp.getResolution()+"").contains("720")){
+				resBox.setSelectedIndex(0);
 			}else{
-				if((gOp.getResolution()+"").contains("1440")){
-					resBox.setSelectedIndex(2);
+				if((gOp.getResolution()+"").contains("1080")){
+					resBox.setSelectedIndex(1);
 				}else{
-					resBox.setSelectedIndex(3);
+					if((gOp.getResolution()+"").contains("1440")){
+						resBox.setSelectedIndex(2);
+					}else{
+						resBox.setSelectedIndex(3);
+					}
 				}
 			}
+		}catch(Exception e){
+			e.printStackTrace();
+			resBox.setSelectedItem(0);
+			resBox.setEnabled(false);
 		}
 		return resBox;
 	}

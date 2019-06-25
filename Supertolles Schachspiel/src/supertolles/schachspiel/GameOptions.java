@@ -69,7 +69,7 @@ public class GameOptions {
 		start.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				disableGameOptions(g);
-				GameOverlay ov = new GameOverlay(getTimeInSeconds(timeTxt.getText()), 8);
+				GameOverlay ov = new GameOverlay(getTimeInSeconds(timeTxt.getText()), 8, g);
 				ov.setBounds(0, 0, g.getWidth(), g.getHeight());
 				g.add(ov);
 				g.getContentPane().repaint();

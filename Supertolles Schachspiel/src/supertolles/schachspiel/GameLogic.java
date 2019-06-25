@@ -26,9 +26,8 @@ public class GameLogic {
     }
     
     /**
+     * sets all of the pieces in the standard startposition of chess
      * @author Alexander
-     * 
-     *  sets all of the pieces in the standard startposition of chess
      */
     public void startPosition(){
         board[0][0] = new Piece(0, 0, Constants.Color_BLACK, Constants.ROOK);
@@ -57,9 +56,9 @@ public class GameLogic {
     }
     
     /**
+     * sets all of the pieces in the standard startposition of chess
      *  @author Alexander
      * 
-     *  prints the board out in the console
      */
     public void printBoard(){
         for (int i = 0; i < boardlength; i++) {
@@ -162,6 +161,7 @@ public class GameLogic {
     
     /**
      * Checks if a figure (x,y) is threatened by another figure
+     * @author Niklas
      * @param x x-coordinate of the investigated figure
      * @param y y-coordinate of the investigated figure
      * @return Returns true if the investigated figure is threatened
@@ -481,11 +481,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the MoveOptions of a oiece standing on the field(x/y) 
      * this methode takes pins and check into account
-     * 
+     * @author Alexander
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
      * @return integer ArrayList of all the available fields to move on
@@ -718,7 +716,7 @@ public class GameLogic {
             }
         }
         
-        if(board[y-1][x] == null && board[y-2][x] == null && !board[y][x].getMoved()){
+        if(isInBounds(x, y-1) && isInBounds(x, y-2) && board[y-1][x] == null && board[y-2][x] == null && !board[y][x].getMoved()){
         	moveOptions.add(new Integer[]{x, y-2, 0});
         }
         return moveOptions;

@@ -16,10 +16,16 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.plaf.DesktopPaneUI;
+
+import supertolles.schachspiel.gui.Game;
 
 
 /**
@@ -55,12 +61,12 @@ public class GameOverlay extends JPanel{
     Protocol protocol;
     //0=white 1= black | 0=pawn, 1=knight, 2=bishop, 3=rook, 4=queen, 5=king
     ImageIcon[][] skins;
+    private Game game;
     
-    public GameOverlay(int timeInSec, int boardLength){
+    public GameOverlay(int timeInSec, int boardLength, Game g){
         int buttonHeight = 80;
         
         setLayout(null);
-        
         gamestate = Constants.WHITE_TO_SELECT;
         logic = new GameLogic(this, boardLength);
         timer = new Timer(logic, this, timeInSec);
@@ -138,6 +144,8 @@ public class GameOverlay extends JPanel{
         
         createScaledImages();
         
+        game = g;
+        
         updateBoard();
     }
     
@@ -180,11 +188,15 @@ public class GameOverlay extends JPanel{
                         board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
                     }
                 }
+                if(y == 0 && logic.board[y][x].getType() == Constants.PAWN){
+                	upgradePiece(x, y);
+                	updateBoard();
+                }else{
+                	updateGamestate();
+                    update();
+                    timer.clock(); 
+                }
                 
-                updateGamestate();
-                update();
-                timer.clock(); 
-//                System.out.println(gamestate);
             }
         }
         if(!isMoveOption){
@@ -215,7 +227,6 @@ public class GameOverlay extends JPanel{
                     if(gamestate == Constants.WHITE_TO_SELECT || gamestate == Constants.BLACK_TO_SELECT){
                         updateGamestate();
                     }
-                    System.out.println(gamestate);
                 }
             }
         }
@@ -231,6 +242,7 @@ public class GameOverlay extends JPanel{
     }
     
     /**
+     * This method updates the overlay and the logic
      * @author Niklas
      */
     //TODO KLASSE PROTOCOL MUSS GEMACHT WERDEN!
@@ -244,7 +256,6 @@ public class GameOverlay extends JPanel{
 */    	
     	
     	//0: Pawn, 1: Knight, 2: Bishop, 3: Rook, 4: Queen, 5: King
-    	//int[] takenPieces = new int[6];
     	HashMap<String, Integer> takenPieces = new HashMap<String, Integer>();
     	takenPieces.put(Constants.PAWN, 0);
     	takenPieces.put(Constants.KNIGHT, 0);
@@ -305,6 +316,16 @@ public class GameOverlay extends JPanel{
     	for(int i=0; i<piecesBlack.getComponentCount();i++){
     		piecesBlack.remove(i);
     	}
+    	if(piecesWhite.getComponentCount()>0){
+    		for(int i=0; i<piecesWhite.getComponentCount();i++){
+        		piecesWhite.remove(i);
+        	}
+    	}
+    	if(piecesBlack.getComponentCount()>0){
+    		for(int i=0; i<piecesBlack.getComponentCount();i++){
+        		piecesBlack.remove(i);
+        	}
+    	}
     	for(int i=0; i< takenPieces.size(); i++){
     		if(takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i])<0){
     			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j < 0; j++){
@@ -316,6 +337,9 @@ public class GameOverlay extends JPanel{
     			}
     		}
     	}
+    	piecesWhite.repaint();
+    	piecesBlack.repaint();
+    	
     	updateBoard();
     	//Kurzer Delay nach gemachtem Zug, bevor sich das Spielfeld umdreht
 /*    	try {
@@ -338,7 +362,6 @@ public class GameOverlay extends JPanel{
     	ImageIcon img;
     	if(color == Constants.Color_BLACK){
     		ImageIcon whiteIcon=null;
-    		//TODO URL zu Bildern einf�gen
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
@@ -371,7 +394,6 @@ public class GameOverlay extends JPanel{
     		piecesWhite.add(whitePiece);
     	}else{
     		ImageIcon blackIcon=null;
-    		//TODO URL zu Bildern einf�gen
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
@@ -405,11 +427,14 @@ public class GameOverlay extends JPanel{
     	}
     }
     
+    private void updateTakenPieces(){
+    	
+    }
+    
     /**
      * The method updates the buttons of the board
      * @author Niklas
      */
-    //TODO URL zu den Icons einf�gen!!!!
     void updateBoard(){
     	ImageIcon skin = null;
     	Image scaled = null;
@@ -538,5 +563,104 @@ public class GameOverlay extends JPanel{
     		JOptionPane.showMessageDialog(null, color.toUpperCase()+ " is victorious due to the expired time of the opponent!");
     		break;
     	}
+    }
+    
+    /**
+     * Method creates a JDialog for choosing the type of piece to which the pawn (x, y) should be upgraded
+     * @author Niklas
+     * @param x x-coordinate on which the figure which should be upgraded is standing
+     * @param y y-coordinate on which the figure which should be upgraded is standing
+     */
+    private void upgradePiece(int x, int y){
+    	JDialog dialog = new JDialog(game);
+    	dialog.setBounds(getWidth()/2-150, getHeight()/2-150, 300, 300);
+    	dialog.setLocation(game.getX()+game.getWidth()/2-150, game.getY()+game.getHeight()/2-150);
+    	dialog.getContentPane().setLayout(null);
+    	
+    	JButton knight = new JButton("");
+    	knight.setBounds(15, 16, 100, 100);
+    	knight.setContentAreaFilled(false);
+    	knight.setBorderPainted(false);
+    	knight.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				logic.board[y][x].setType(Constants.KNIGHT);
+				updateBoard();
+				dialog.dispose();
+				remove(dialog);
+				updateGamestate();
+                update();
+                timer.clock(); 
+			}
+    	});
+		dialog.getContentPane().add(knight);
+		
+		JButton bishop = new JButton("");
+		bishop.setBounds(169, 16, 100, 100);
+		bishop.setContentAreaFilled(false);
+		bishop.setBorderPainted(false);
+		bishop.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				logic.board[y][x].setType(Constants.BISHOP);
+				updateBoard();
+				dialog.dispose();
+				remove(dialog);
+				repaint();
+				updateGamestate();
+                update();
+                timer.clock(); 
+			}
+    	});
+		dialog.getContentPane().add(bishop);
+		
+		JButton rook = new JButton("");
+		rook.setBounds(15, 132, 100, 100);
+		rook.setContentAreaFilled(false);
+		rook.setBorderPainted(false);
+		rook.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				logic.board[y][x].setType(Constants.ROOK);
+				updateBoard();
+				dialog.dispose();
+				remove(dialog);
+				repaint();
+				updateGamestate();
+                update();
+                timer.clock(); 
+			}
+    	});
+		dialog.getContentPane().add(rook);
+		
+		JButton queen = new JButton("");
+		queen.setBounds(169, 132, 100, 100);
+		queen.setContentAreaFilled(false);
+    	queen.setBorderPainted(false);
+		queen.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				logic.board[y][x].setType(Constants.QUEEN);
+				updateBoard();
+				dialog.dispose();
+				remove(dialog);
+				repaint();
+				updateGamestate();
+                update();
+                timer.clock(); 
+			}
+    	});
+		dialog.getContentPane().add(queen);
+		
+		if(logic.board[y][x].getColour() == Constants.Color_WHITE){
+			knight.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			bishop.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			rook.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			queen.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+		}else{
+			knight.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			bishop.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			rook.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+			queen.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
+		}
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		System.out.println(dialog.getHeight()+"  "+dialog.getWidth()+"  "+dialog.getX()+"  "+dialog.getY());
+		dialog.setVisible(true);
     }
 }

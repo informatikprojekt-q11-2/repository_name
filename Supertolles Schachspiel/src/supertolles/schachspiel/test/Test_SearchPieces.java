@@ -20,7 +20,7 @@ public class Test_SearchPieces extends GameLogic{
     
 
     public Test_SearchPieces(){
-        super(new GameOverlay(0, 8), 8);
+        super(new GameOverlay(0, 8, null), 8);
         
     }
     
