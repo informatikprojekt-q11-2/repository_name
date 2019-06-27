@@ -1063,4 +1063,8 @@ public class GameLogic {
     	checkWinConditions();
     }
     
+    public Piece[][] getBoard(){
+    	return board;
+    }
+    
 }

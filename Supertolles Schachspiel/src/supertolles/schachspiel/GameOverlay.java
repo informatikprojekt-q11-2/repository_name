@@ -53,8 +53,6 @@ public class GameOverlay extends JPanel{
     int gamestate, clickedX, clickedY;
     ArrayList<Integer[]> currentMoveOptions;
     ChessButton[][] board;
-    ArrayList<Piece> takenPiecesWhite, takenPiecesBlack;
-    
     JPanel piecesWhite, piecesBlack, playingField;
     JButton surrender;
     Timer timer;
@@ -124,10 +122,6 @@ public class GameOverlay extends JPanel{
         
         add(playingField);
         
-        takenPiecesWhite = new ArrayList<Piece>();
-        takenPiecesBlack = new ArrayList<Piece>();
-        
-        
         piecesWhite = new JPanel();
         piecesWhite.setBounds(80*boardLength+80*2, 80*boardLength, 75*11, (int)(75*2.2));
         piecesWhite.setLayout(null);
@@ -171,13 +165,6 @@ public class GameOverlay extends JPanel{
             }
             
             if(isMoveOption){
-            	if(logic.board[y][x] != null){
-            		if(logic.board[y][x].getColour() == Constants.Color_WHITE){
-            			takenPiecesWhite.add(logic.board[y][x]);
-            		}else{
-            			takenPiecesBlack.add(logic.board[y][x]);
-            		}
-            	}
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
@@ -188,7 +175,7 @@ public class GameOverlay extends JPanel{
                         board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
                     }
                 }
-                if(y == 0 && logic.board[y][x].getType() == Constants.PAWN){
+                if(y == 0 && logic.getBoard()[y][x].getType() == Constants.PAWN){
                 	upgradePiece(x, y);
                 	updateBoard();
                 }else{
@@ -200,9 +187,9 @@ public class GameOverlay extends JPanel{
             }
         }
         if(!isMoveOption){
-            if(logic.board[y][x] != null){
-                if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_WHITE) || 
-                   ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.board[y][x].getColour() == Constants.Color_BLACK)){
+            if(logic.getBoard()[y][x] != null){
+                if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.getBoard()[y][x].getColour() == Constants.Color_WHITE) || 
+                   ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.getBoard()[y][x].getColour() == Constants.Color_BLACK)){
                 	for(int i = 0; i<currentMoveOptions.size();i++){
                          if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
                              board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
@@ -263,50 +250,58 @@ public class GameOverlay extends JPanel{
     	takenPieces.put(Constants.ROOK, 0);
     	takenPieces.put(Constants.QUEEN, 0);
     	takenPieces.put(Constants.KING, 0);
-    	for(int i=0; i<takenPiecesWhite.size(); i++){
-    		switch(takenPiecesWhite.get(i).getType()){
-    		case Constants.PAWN:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		case Constants.KNIGHT:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		case Constants.BISHOP:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		case Constants.ROOK:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		case Constants.QUEEN:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		case Constants.KING:
-    			takenPieces.put(takenPiecesWhite.get(i).getType(), takenPieces.get(takenPiecesWhite.get(i).getType())+1);
-    			break;
-    		}
-    	}
     	
-    	for(int i=0; i<takenPiecesBlack.size(); i++){
-    		switch(takenPiecesBlack.get(i).getType()){
-    		case Constants.PAWN:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		case Constants.KNIGHT:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		case Constants.BISHOP:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		case Constants.ROOK:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		case Constants.QUEEN:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		case Constants.KING:
-    			takenPieces.put(takenPiecesBlack.get(i).getType(), takenPieces.get(takenPiecesBlack.get(i).getType())-1);
-    			break;
-    		}
+    	for(int y = 0; y < board.length; y++){
+    		for(int x = 0; x < board.length; x++){
+    			if(logic.getBoard()[y][x]!=null){
+            		switch(logic.getBoard()[y][x].getColour()){
+            		case Constants.Color_WHITE:
+            			switch(logic.getBoard()[y][x].getType()){
+                		case Constants.PAWN:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		case Constants.KNIGHT:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		case Constants.BISHOP:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		case Constants.ROOK:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		case Constants.QUEEN:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		case Constants.KING:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())+1);
+                			break;
+                		}
+            			break;
+            		case Constants.Color_BLACK:
+            			switch(logic.getBoard()[y][x].getType()){
+                		case Constants.PAWN:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		case Constants.KNIGHT:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		case Constants.BISHOP:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		case Constants.ROOK:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		case Constants.QUEEN:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		case Constants.KING:
+                			takenPieces.put(logic.getBoard()[y][x].getType(), takenPieces.get(logic.getBoard()[y][x].getType())-1);
+                			break;
+                		}
+            			break;
+            		}
+    			}
+        	}
     	}
     	
     	//Update von der Anzeige der geschlagenen Figuren
@@ -326,14 +321,15 @@ public class GameOverlay extends JPanel{
         		piecesBlack.remove(i);
         	}
     	}
+    	
     	for(int i=0; i< takenPieces.size(); i++){
     		if(takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i])<0){
     			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j < 0; j++){
-    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_BLACK);
+    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_WHITE);
     			}
     		}else{
     			for(int j=takenPieces.get(takenPieces.keySet().toArray(new String[takenPieces.size()])[i]); j > 0; j--){
-    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_WHITE);
+    				addTakenPieceToOverlay(takenPieces.keySet().toArray(new String[takenPieces.size()])[i], Constants.Color_BLACK);
     			}
     		}
     	}
@@ -440,7 +436,7 @@ public class GameOverlay extends JPanel{
     	Image scaled = null;
     	for(int y = 0 ; y < board.length; y++){
     		for(int x = 0 ; x < board.length; x++){
-        		Piece temp = logic.board[y][x];
+        		Piece temp = logic.getBoard()[y][x];
         		if(temp != null){
         			switch(temp.getColour()){
         			case Constants.Color_WHITE:
@@ -552,15 +548,27 @@ public class GameOverlay extends JPanel{
     	switch(reason){
     	case Constants.Reason_Surrender:
     		JOptionPane.showMessageDialog(null, color.toUpperCase()+" is victorious due to his opponent's surrender!");
+    		game.getMenu().enableMainmenu(game);
+    		game.remove(this);
+    		game.repaint();
     		break;
     	case Constants.Reason_CheckMate:
     		JOptionPane.showMessageDialog(null, color.toUpperCase()+" is victorious!");
+    		game.getMenu().enableMainmenu(game);
+    		game.remove(this);
+    		game.repaint();
     		break;
     	case Constants.Reason_StaleMate:
     		JOptionPane.showMessageDialog(null, "Stalemate! Nobody wins!");
+    		game.getMenu().enableMainmenu(game);
+    		game.remove(this);
+    		game.repaint();
     		break;
     	case Constants.Reason_TimeUp:
     		JOptionPane.showMessageDialog(null, color.toUpperCase()+ " is victorious due to the expired time of the opponent!");
+    		game.getMenu().enableMainmenu(game);
+    		game.remove(this);
+    		game.repaint();
     		break;
     	}
     }
@@ -583,7 +591,7 @@ public class GameOverlay extends JPanel{
     	knight.setBorderPainted(false);
     	knight.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				logic.board[y][x].setType(Constants.KNIGHT);
+				logic.getBoard()[y][x].setType(Constants.KNIGHT);
 				updateBoard();
 				dialog.dispose();
 				remove(dialog);
@@ -600,7 +608,7 @@ public class GameOverlay extends JPanel{
 		bishop.setBorderPainted(false);
 		bishop.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				logic.board[y][x].setType(Constants.BISHOP);
+				logic.getBoard()[y][x].setType(Constants.BISHOP);
 				updateBoard();
 				dialog.dispose();
 				remove(dialog);
@@ -618,7 +626,7 @@ public class GameOverlay extends JPanel{
 		rook.setBorderPainted(false);
 		rook.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				logic.board[y][x].setType(Constants.ROOK);
+				logic.getBoard()[y][x].setType(Constants.ROOK);
 				updateBoard();
 				dialog.dispose();
 				remove(dialog);
@@ -636,7 +644,7 @@ public class GameOverlay extends JPanel{
     	queen.setBorderPainted(false);
 		queen.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				logic.board[y][x].setType(Constants.QUEEN);
+				logic.getBoard()[y][x].setType(Constants.QUEEN);
 				updateBoard();
 				dialog.dispose();
 				remove(dialog);
@@ -648,7 +656,7 @@ public class GameOverlay extends JPanel{
     	});
 		dialog.getContentPane().add(queen);
 		
-		if(logic.board[y][x].getColour() == Constants.Color_WHITE){
+		if(logic.getBoard()[y][x].getColour() == Constants.Color_WHITE){
 			knight.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
 			bishop.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
 			rook.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
@@ -660,7 +668,6 @@ public class GameOverlay extends JPanel{
 			queen.setIcon(new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen)).getImage().getScaledInstance(100, 100, Image.SCALE_FAST)));
 		}
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		System.out.println(dialog.getHeight()+"  "+dialog.getWidth()+"  "+dialog.getX()+"  "+dialog.getY());
 		dialog.setVisible(true);
     }
 }
