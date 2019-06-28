@@ -226,7 +226,6 @@ public class Options {
 		fsBox.setBounds(fs.getX()+fs.getWidth(), fs.getY()+fs.getHeight()/5, optionOverlay.getWidth()/9, optionOverlay.getHeight()/25);
 		fsBox.setFont(new Font("Tahoma", Font.PLAIN, (int) (fsBox.getHeight()*0.4)));
 		fsBox.setFocusable(false);
-		fsBox.setEnabled(false);
 		return fsBox;
 	}
 	

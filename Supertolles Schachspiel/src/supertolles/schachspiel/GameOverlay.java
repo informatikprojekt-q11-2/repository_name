@@ -6,6 +6,7 @@
 package supertolles.schachspiel;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,14 +17,11 @@ import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.plaf.DesktopPaneUI;
 
 import supertolles.schachspiel.gui.Game;
 
@@ -63,6 +61,7 @@ public class GameOverlay extends JPanel{
     
     public GameOverlay(int timeInSec, int boardLength, Game g){
         int buttonHeight = 80;
+        game = g;
         
         setLayout(null);
         gamestate = Constants.WHITE_TO_SELECT;
@@ -72,7 +71,6 @@ public class GameOverlay extends JPanel{
         playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
         currentMoveOptions = new ArrayList<Integer[]>();
         protocol = new Protocol(this);
-        
         board = new ChessButton[boardLength][boardLength];
         for(int y = 0; y < boardLength; y++){
             for(int x = 0; x < boardLength; x++){
@@ -137,10 +135,21 @@ public class GameOverlay extends JPanel{
         piecesBlack.setBackground(Color.BLACK);
         add(piecesBlack);
         
+        surrender = new JButton("Surrender");
+        surrender.setBounds(660, 150, 100, 100);
+        surrender.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameOver(Constants.Reason_Surrender, (gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_MOVE) ? Constants.Color_WHITE: Constants.Color_BLACK);
+			}
+        });
+        surrender.setFocusable(false);
+        surrender.setBorderPainted(false);
+        surrender.setContentAreaFilled(false);
+        add(surrender);
+        
         createScaledImages();
-        
-        game = g;
-        
+
         updateBoard();
     }
     
@@ -183,7 +192,7 @@ public class GameOverlay extends JPanel{
                 }else{
                     updateGamestate();
                     update();
-                    timer.clock(); 
+                    timer.clock();
                 }
                 
             }
@@ -234,16 +243,7 @@ public class GameOverlay extends JPanel{
      * This method updates the overlay and the logic
      * @author Niklas
      */
-    //TODO KLASSE PROTOCOL MUSS GEMACHT WERDEN!
     public void update(){
-/*    	//protocol.protocol() ??
-    	for(int y = 0; y < board.length; y++){
-    		for(int x = 0; x < board.length; x++){
-        		//Irgendetwas mit board[][] machen
-        	}
-    	}
-*/    	
-    	
     	//0: Pawn, 1: Knight, 2: Bishop, 3: Rook, 4: Queen, 5: King
     	HashMap<String, Integer> takenPieces = new HashMap<String, Integer>();
     	takenPieces.put(Constants.PAWN, 0);
@@ -347,7 +347,6 @@ public class GameOverlay extends JPanel{
 		}
 */    	logic.nextMove();
     	updateBoard();
-    	
     }
     
     /**
@@ -423,10 +422,6 @@ public class GameOverlay extends JPanel{
     		blackPiece.setBounds(75*piecesBlack.getComponentCount(), 75*(piecesBlack.getComponentCount()/10), 75, 75);
     		piecesBlack.add(blackPiece);
     	}
-    }
-    
-    private void updateTakenPieces(){
-    	
     }
     
     /**
@@ -586,11 +581,16 @@ public class GameOverlay extends JPanel{
     	dialog.setBounds(getWidth()/2-150, getHeight()/2-150, 300, 300);
     	dialog.setLocation(game.getX()+game.getWidth()/2-150, game.getY()+game.getHeight()/2-150);
     	dialog.getContentPane().setLayout(null);
+    	dialog.setTitle("Upgrade Piece");
+    	dialog.setIconImage(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_IconUpgrade)).getImage());
+    	
+    	Cursor c = new Cursor(Cursor.HAND_CURSOR);
     	
     	JButton knight = new JButton("");
     	knight.setBounds(15, 16, 100, 100);
     	knight.setContentAreaFilled(false);
     	knight.setBorderPainted(false);
+    	knight.setCursor(c);
     	knight.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				logic.getBoard()[y][x].setType(Constants.KNIGHT);
@@ -608,6 +608,7 @@ public class GameOverlay extends JPanel{
 		bishop.setBounds(169, 16, 100, 100);
 		bishop.setContentAreaFilled(false);
 		bishop.setBorderPainted(false);
+		bishop.setCursor(c);
 		bishop.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				logic.getBoard()[y][x].setType(Constants.BISHOP);
@@ -626,6 +627,7 @@ public class GameOverlay extends JPanel{
 		rook.setBounds(15, 132, 100, 100);
 		rook.setContentAreaFilled(false);
 		rook.setBorderPainted(false);
+		rook.setCursor(c);
 		rook.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				logic.getBoard()[y][x].setType(Constants.ROOK);
@@ -644,6 +646,7 @@ public class GameOverlay extends JPanel{
 		queen.setBounds(169, 132, 100, 100);
 		queen.setContentAreaFilled(false);
     	queen.setBorderPainted(false);
+    	queen.setCursor(c);
 		queen.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				logic.getBoard()[y][x].setType(Constants.QUEEN);

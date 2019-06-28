@@ -57,6 +57,7 @@ public class Constants {
     public static final String Picture_WhiteCaesar="/supertolles/schachspiel/Pictures/CaesarW.png";
     public static final String Picture_BlackCaesar="/supertolles/schachspiel/Pictures/CaesarB.png";
     
+    public static final String Picture_IconUpgrade="/supertolles/schachspiel/Pictures/UpgradeIcon.png";
     
     //win reasons
     public static final int Reason_Surrender = 0;

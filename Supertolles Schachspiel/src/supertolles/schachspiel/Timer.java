@@ -153,7 +153,7 @@ public class Timer extends StopWatch{
     /**
      * @author Niklas
      * @param currentTime Time in seconds which should be formatted
-     * @return Returns a <code>String</code> formatted in HH:MM:SS
+     * @return Returns a <code>String</code> formatted in <b>HH:MM:SS</b>
      */
     private String getTime_H_Min_Sek(long currentTime){
     	long sek = currentTime%60;
