@@ -71,6 +71,7 @@ public class GameOverlay extends JPanel{
         playingField = new JPanel(null);
         playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
         currentMoveOptions = new ArrayList<Integer[]>();
+        protocol = new Protocol(this);
         
         board = new ChessButton[boardLength][boardLength];
         for(int y = 0; y < boardLength; y++){
@@ -165,6 +166,7 @@ public class GameOverlay extends JPanel{
             }
             
             if(isMoveOption){
+                protocol.updateProtocol(logic.getBoard()[clickedY][clickedX], logic.getBoard()[y][x] != null, false);
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
@@ -179,7 +181,7 @@ public class GameOverlay extends JPanel{
                 	upgradePiece(x, y);
                 	updateBoard();
                 }else{
-                	updateGamestate();
+                    updateGamestate();
                     update();
                     timer.clock(); 
                 }
