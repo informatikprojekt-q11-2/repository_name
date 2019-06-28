@@ -580,10 +580,10 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      *  computes possible restriction of moveoptions because of check
      *  there has to be a piece standing on the given field
+     * 
+     * @author Alexander
      * 
      *  @param x: the x coordinate of the field that schould be tested
      *  @param y: the y coordinate of the field that schould be tested
@@ -607,10 +607,10 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      *  computes possible restriction of moveoptions because of a pin 
      *  there has to be a piece standing on the given field
+     * 
+     * @author Alexander
      * 
      *  @param x: the x coordinate of the field that schould be tested
      *  @param y: the y coordinate of the field that schould be tested
@@ -640,46 +640,23 @@ public class GameLogic {
                     int yPinPiece = y+((pinRestrictions.size()+1)*yDirection);
                     
                     if(isInBounds(xPinPiece, yPinPiece)){
-                    	 if((((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
-                                 (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
-                                 (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN))&&board[yPinPiece][xPinPiece].getColour() != board[y][x].getColour()){
-                                      pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
-                                      for (int i = 0; i < pinRestrictions.size(); i++) {
-                                          possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
-                                      }
-                              }else{
-                                  for (int i = 0; i < boardlength; i++) {
-                                      for (int j = 0; j < boardlength; j++) {
-                                          possibleMovement[i][j] = true;
-                                      }
-                                  }
-                              }
-                    }else{
-                    	for (int i = 0; i < boardlength; i++) {
-                            for (int j = 0; j < boardlength; j++) {
-                                possibleMovement[i][j] = true;
-                            }
+                        if((((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
+                             (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
+                              (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN))&&board[yPinPiece][xPinPiece].getColour() != board[y][x].getColour()){
+                                pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
+                                for (int i = 0; i < pinRestrictions.size(); i++) {
+                                    possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
+                                }
+                                return possibleMovement;
                         }
                     }   
-                }else{
-                    for (int i = 0; i < boardlength; i++) {
-                        for (int j = 0; j < boardlength; j++) {
-                            possibleMovement[i][j] = true;
-                        }
-                    }
-                }
-            }else{
-                for (int i = 0; i < boardlength; i++) {
-                    for (int j = 0; j < boardlength; j++) {
-                        possibleMovement[i][j] = true;
-                    }
                 }
             }
-        }else{
-            for (int i = 0; i < boardlength; i++) {
-                for (int j = 0; j < boardlength; j++) {
-                    possibleMovement[i][j] = true;
-                }
+        }
+        
+        for (int i = 0; i < boardlength; i++) {
+            for (int j = 0; j < boardlength; j++) {
+                possibleMovement[i][j] = true;
             }
         }
         
@@ -687,9 +664,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the basic Movement of a Pawn standing on the field with the given parameters
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
@@ -723,10 +700,10 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the basic Movement of a Knight standing on the field with the given parameters
      * 
+     * @author Alexander
+     *  
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
      * @return integer ArrayList of all the available fields to move on
@@ -813,9 +790,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the possible Movement of a king standing on the field with the given parameters
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
@@ -828,15 +805,13 @@ public class GameLogic {
         ArrayList<Integer[]> moveOptions = new ArrayList<Integer[]>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if(isInBounds(x+j, y+i)){
-                    if(!(x+j == x && y+i == y)){
-                        if(searchThreatFigure(x+j, y+i, board[y][x]).length == 0){
-                            if(board[y+i][x+j] == null){
-                                moveOptions.add(new Integer[]{x+j, y+i, 0});
-                            }else{
-                                if(board[y+i][x+j].getColour() != board[y][x].getColour()){
-                                    moveOptions.add(new Integer[]{x+j, y+i, 1});
-                                }
+                if(isInBounds(x+j, y+i) && !(x+j == x && y+i == y)){
+                    if(searchThreatFigure(x+j, y+i, board[y][x]).length == 0){
+                        if(board[y+i][x+j] == null){
+                            moveOptions.add(new Integer[]{x+j, y+i, 0});
+                        }else{
+                            if(board[y+i][x+j].getColour() != board[y][x].getColour()){
+                                moveOptions.add(new Integer[]{x+j, y+i, 1});
                             }
                         }
                     }
@@ -848,9 +823,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the basic straight Movement outward from the field with the given parameters
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
@@ -922,9 +897,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * computes the basic diagonal Movement outward from the field with the given parameters
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the field
      * @param y: y-Coordinate of the field
@@ -1013,9 +988,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * gets the Coordinates of the King of the colour that can currently move
+     * 
+     * @author Alexander
      * 
      * @return integer Array of size 2 with the Coordinates of the King of the colour that can currently move
      *      index 0: x-Coordinate
@@ -1041,9 +1016,9 @@ public class GameLogic {
     }
     
     /**
-     * @author Alexander
-     * 
      * tests if a field is in bounds
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the tested field
      * @param y: y-Coordinate of the tested field

@@ -155,10 +155,12 @@ public class GameOverlay extends JPanel{
     
     
     /**
-     * @author Alexander
-     * 
      *  depending on the current gamestate the method either initiates the computing of the moveoptions of the piece on the clicked field
-     *  or it initiates the moving of the figure
+     *  or it initiates the moving of the figure and the update of the board, protocol, timer and taken-pieces graphicks
+     * 
+     *  this methode will also update the gamestate
+     * 
+     * @author Alexander
      * 
      * @param x: x-Coordinate of the clicked button
      * @param y: y-Coordinate of the clicked button 
@@ -201,13 +203,13 @@ public class GameOverlay extends JPanel{
             if(logic.getBoard()[y][x] != null){
                 if(((gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.WHITE_TO_SELECT) && logic.getBoard()[y][x].getColour() == Constants.Color_WHITE) || 
                    ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.getBoard()[y][x].getColour() == Constants.Color_BLACK)){
-                	for(int i = 0; i<currentMoveOptions.size();i++){
-                         if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
-                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
-                         }
-                         else{
-                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
-                         }
+                    for(int i = 0; i<currentMoveOptions.size();i++){
+                        if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
+                            board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
+                        }
+                        else{
+                            board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
+                        }
                     }
                     currentMoveOptions = logic.computeMoveOptions(x,y);
                     clickedX = x;
