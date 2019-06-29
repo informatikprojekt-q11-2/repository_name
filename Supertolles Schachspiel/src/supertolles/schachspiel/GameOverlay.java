@@ -174,18 +174,19 @@ public class GameOverlay extends JPanel{
      */
     public void clicked(int x, int y){
         boolean isMoveOption = false;
+        boolean captured = false;
         
         if(gamestate == Constants.WHITE_TO_MOVE || gamestate == Constants.BLACK_TO_MOVE){
-            
             for(int i = 0; i < currentMoveOptions.size(); i++){
                 if(currentMoveOptions.get(i)[0] == x && currentMoveOptions.get(i)[1] == y){
                     isMoveOption = true;
+                    captured = (currentMoveOptions.get(i)[2] == Constants.TRUE);
                 }
             }
             
             if(isMoveOption){
-                protocol.updateProtocol(logic.getBoard()[clickedY][clickedX], logic.getBoard()[y][x] != null, false);
                 logic.movePiece(new int[]{clickedX, clickedY}, x, y);
+                protocol.updateProtocol(logic.getBoard()[y][x], captured, false);
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
                     if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
