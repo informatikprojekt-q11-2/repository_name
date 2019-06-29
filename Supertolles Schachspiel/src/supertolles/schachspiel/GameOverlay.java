@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import supertolles.schachspiel.gui.Game;
@@ -57,7 +60,7 @@ public class GameOverlay extends JPanel{
     Protocol protocol;
     //0=white 1= black | 0=pawn, 1=knight, 2=bishop, 3=rook, 4=queen, 5=king
     ImageIcon[][] skins;
-    private Game game;
+    Game game;
     
     public GameOverlay(int timeInSec, int boardLength, Game g){
         int buttonHeight = 80;
@@ -68,7 +71,7 @@ public class GameOverlay extends JPanel{
         logic = new GameLogic(this, boardLength);
         timer = new Timer(logic, this, timeInSec);
         playingField = new JPanel(null);
-        playingField.setBounds(0, 0, boardLength*buttonHeight, boardLength*buttonHeight);
+        playingField.setBounds(g.getWidth()/2-(4*buttonHeight), 40, boardLength*buttonHeight, boardLength*buttonHeight);
         currentMoveOptions = new ArrayList<Integer[]>();
         protocol = new Protocol(this);
         board = new ChessButton[boardLength][boardLength];
@@ -121,22 +124,26 @@ public class GameOverlay extends JPanel{
         
         add(playingField);
         
+        int takenPiecesWidth = (((int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0))*50 > 50*10) ? 500: ((int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0))*50;
+        int takenPiecesHeight = (int)((Math.ceil(15.0/(int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0)))*50);
+        
         piecesWhite = new JPanel();
-        piecesWhite.setBounds(80*boardLength+80*2, 80*boardLength, 75*11, (int)(75*2.2));
+        piecesWhite.setBounds(playingField.getX()+playingField.getWidth()+10, playingField.getY()+playingField.getHeight()-takenPiecesHeight, takenPiecesWidth, takenPiecesHeight);
         piecesWhite.setLayout(null);
         piecesWhite.setVisible(true);
         piecesWhite.setBackground(Color.WHITE);
         add(piecesWhite);
         
         piecesBlack = new JPanel();
-        piecesBlack.setBounds(80*boardLength+80*2, 80, 75*11, (int)(75*2.2));
+        piecesBlack.setBounds(piecesWhite.getX(), playingField.getY(), takenPiecesWidth, takenPiecesHeight);
         piecesBlack.setLayout(null);
         piecesBlack.setVisible(true);
         piecesBlack.setBackground(Color.BLACK);
         add(piecesBlack);
         
         surrender = new JButton("Surrender");
-        surrender.setBounds(660, 150, 100, 100);
+        surrender.setBounds(playingField.getX()+(playingField.getWidth()/2)-50, playingField.getY()+playingField.getHeight()+10, 100, 100);
+        surrender.setHorizontalAlignment(SwingConstants.CENTER);
         surrender.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -192,9 +199,9 @@ public class GameOverlay extends JPanel{
                 	upgradePiece(x, y);
                 	updateBoard();
                 }else{
-                    updateGamestate();
-                    update();
-                    timer.clock();
+                        updateGamestate();
+                        update();
+                        timer.clock();
                 }
                 
             }
@@ -309,21 +316,11 @@ public class GameOverlay extends JPanel{
     	}
     	
     	//Update von der Anzeige der geschlagenen Figuren
-    	for(int i=0; i<piecesWhite.getComponentCount();i++){
+    	for(int i=piecesWhite.getComponentCount()-1; i>=0;i--){
     		piecesWhite.remove(i);
     	}
-    	for(int i=0; i<piecesBlack.getComponentCount();i++){
+    	for(int i=piecesBlack.getComponentCount()-1; i>=0;i--){
     		piecesBlack.remove(i);
-    	}
-    	if(piecesWhite.getComponentCount()>0){
-    		for(int i=0; i<piecesWhite.getComponentCount();i++){
-        		piecesWhite.remove(i);
-        	}
-    	}
-    	if(piecesBlack.getComponentCount()>0){
-    		for(int i=0; i<piecesBlack.getComponentCount();i++){
-        		piecesBlack.remove(i);
-        	}
     	}
     	
     	for(int i=0; i< takenPieces.size(); i++){
@@ -359,69 +356,70 @@ public class GameOverlay extends JPanel{
      */
     private void addTakenPieceToOverlay(String type, String color){
     	ImageIcon img;
+        int scaledSize = 50;
     	if(color == Constants.Color_BLACK){
     		ImageIcon whiteIcon=null;
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.KNIGHT:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.BISHOP:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.ROOK:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.QUEEN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.KING:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKing));
-    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			whiteIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		}
     		JLabel whitePiece = new JLabel(whiteIcon);
     		//TODO Gr��e anpassen
-    		whitePiece.setBounds(75*piecesWhite.getComponentCount(), 75*(piecesWhite.getComponentCount()/10), 75, 75);
+    		whitePiece.setBounds(((piecesWhite.getComponentCount())%(piecesWhite.getWidth()/scaledSize))*scaledSize, scaledSize*(piecesWhite.getComponentCount()/(piecesWhite.getWidth()/scaledSize)), scaledSize, scaledSize);
     		piecesWhite.add(whitePiece);
     	}else{
     		ImageIcon blackIcon=null;
     		switch(type){
     		case Constants.PAWN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.KNIGHT:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.BISHOP:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.ROOK:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.QUEEN:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		case Constants.KING:
     			img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKing));
-    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(75, 75, Image.SCALE_FAST));
+    			blackIcon = new ImageIcon(img.getImage().getScaledInstance(scaledSize, scaledSize, Image.SCALE_FAST));
     			break;
     		}
     		JLabel blackPiece = new JLabel(blackIcon);
     		//TODO Gr��e anpassen
-    		blackPiece.setBounds(75*piecesBlack.getComponentCount(), 75*(piecesBlack.getComponentCount()/10), 75, 75);
+    		blackPiece.setBounds(((piecesBlack.getComponentCount())%(piecesBlack.getWidth()/scaledSize))*scaledSize, scaledSize*(piecesBlack.getComponentCount()/(piecesBlack.getWidth()/scaledSize)), scaledSize, scaledSize);
     		piecesBlack.add(blackPiece);
     	}
     }
@@ -431,8 +429,6 @@ public class GameOverlay extends JPanel{
      * @author Niklas
      */
     void updateBoard(){
-    	ImageIcon skin = null;
-    	Image scaled = null;
     	for(int y = 0 ; y < board.length; y++){
     		for(int x = 0 ; x < board.length; x++){
         		Piece temp = logic.getBoard()[y][x];
@@ -497,34 +493,21 @@ public class GameOverlay extends JPanel{
      * @author Niklas
      */
     private void createScaledImages(){
-    	ImageIcon img;
     	if(board.length==8){
         	skins = new ImageIcon[2][6];
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn));
-        	skins[0][0]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight));
-        	skins[0][1]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop));
-        	skins[0][2]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook));
-        	skins[0][3]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen));
-        	skins[0][4]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKing));
-        	skins[0][5]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][0]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhitePawn)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][1]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKnight)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][2]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteBishop)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][3]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteRook)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][4]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteQueen)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[0][5]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_WhiteKing)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
         	
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn));
-        	skins[1][0]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight));
-        	skins[1][1]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop));
-        	skins[1][2]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook));
-        	skins[1][3]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen));
-        	skins[1][4]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
-        	img = new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKing));
-        	skins[1][5]=new ImageIcon(img.getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][0]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackPawn)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][1]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKnight)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][2]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackBishop)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][3]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackRook)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][4]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackQueen)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
+        	skins[1][5]=new ImageIcon(new ImageIcon(GameOverlay.class.getResource(Constants.Picture_BlackKing)).getImage().getScaledInstance(board[0][0].getWidth(), board[0][0].getHeight(), Image.SCALE_SMOOTH));
         	
     	}else{
     		//TODO falls eine weitere Figur eingef�gt wederden soll, hier einf�gen.

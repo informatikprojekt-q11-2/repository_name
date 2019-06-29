@@ -30,7 +30,7 @@ public class Protocol {
         textArea.setEnabled(false);
         textArea.setBounds(0, 0, 360, 1000);
         scrollPane = new JScrollPane(textArea);
-        scrollPane.setBounds(50, 700, 360, 250);
+        scrollPane.setBounds(game.playingField.getX()/2 - ((game.playingField.getX()-40 > 360) ? 360 : game.playingField.getX()-40)/2, game.playingField.getY()+game.playingField.getHeight()/2-125, (game.playingField.getX()-40 > 360) ? 360 : game.playingField.getX()-40, 250);
         scrollPane.setVerticalScrollBarPolicy(scrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         moveNumber = 1;
         overlay = game;

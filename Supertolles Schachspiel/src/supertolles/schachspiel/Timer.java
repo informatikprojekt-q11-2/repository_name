@@ -5,10 +5,12 @@
  */
 package supertolles.schachspiel;
 
+import java.awt.Color;
 import java.util.TimerTask;
 import javax.swing.JLabel;
 import org.apache.commons.lang3.time.StopWatch;
 import java.util.concurrent.TimeUnit;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -35,13 +37,18 @@ public class Timer extends StopWatch{
         refreshTimer = new java.util.Timer();
     	this.overlay = overlay;
         if(timeInSec > 0){
-            //TODO  Größen anpassen
-        	timeWhite = new JLabel(getTime_H_Min_Sek(timeInSec));
-        	timeWhite.setBounds(1000-250, 25, 250, 25);
-        	timeBlack = new JLabel(getTime_H_Min_Sek(timeInSec));
-        	timeBlack.setBounds(1000-250, 50, 250, 25);
+            //TODO  Grï¿½ï¿½en anpassen
+        	timeWhite = new JLabel("Time White:   " + getTime_H_Min_Sek(timeInSec));
+        	timeWhite.setBounds(overlay.game.getWidth()/2-320-125, 5, 250, 30);
+                timeWhite.setHorizontalAlignment(SwingConstants.CENTER);
+                timeWhite.setForeground(Color.WHITE);
+        	timeBlack = new JLabel("Time Black:   " + getTime_H_Min_Sek(timeInSec));
+        	timeBlack.setBounds(overlay.game.getWidth()/2+320-125, 5, 250, 30);
+                timeBlack.setHorizontalAlignment(SwingConstants.CENTER);
+                timeBlack.setForeground(Color.BLACK);
         	playingTime = new JLabel("00:00:00");
-        	playingTime.setBounds(1000-250, 0, 250, 25);
+        	playingTime.setBounds(overlay.game.getWidth()/2-125, 5, 250, 30);
+                playingTime.setHorizontalAlignment(SwingConstants.CENTER);
         	overlay.add(playingTime);
         	overlay.add(timeWhite);
         	overlay.add(timeBlack);
@@ -51,7 +58,8 @@ public class Timer extends StopWatch{
             limitedClock();
         }else{
         	playingTime = new JLabel("00:00:00");
-        	playingTime.setBounds(1000-250, 0, 250, 25);
+        	playingTime.setBounds(overlay.game.getWidth()/2-125, 5, 250, 30);
+                playingTime.setHorizontalAlignment(SwingConstants.CENTER);
         	overlay.add(playingTime);
             unlimitedClock();
         }
@@ -111,8 +119,8 @@ public class Timer extends StopWatch{
 					timeRemainingBlack = timeInSec - currentTime + startTime;
 				}
 				playingTime.setText(getTime_H_Min_Sek(currentTime));
-				timeWhite.setText(getTime_H_Min_Sek(timeRemainingWhite));
-				timeBlack.setText(getTime_H_Min_Sek(timeRemainingBlack));
+				timeWhite.setText("Time White:   " + getTime_H_Min_Sek(timeRemainingWhite));
+				timeBlack.setText("Time Black:   " + getTime_H_Min_Sek(timeRemainingBlack));
 				overlay.repaint();
                 //System.out.println("Spielzeit: "+getTime_H_Min_Sek(currentTime)+ "    Spielzeit weiï¿½:"+getTime_H_Min_Sek(timeRemainingWhite)+"    Spielzeit schwarz:"+getTime_H_Min_Sek(timeRemainingBlack));
 			}
