@@ -79,7 +79,7 @@ public class GameOverlay extends JPanel{
             for(int x = 0; x < boardLength; x++){
                 ChessButton button = new ChessButton(x, y);
                 if((x+y)%2 == 0){
-                    button.setBackground(new Color(243, 234, 226));
+                    button.setBackground(new Color(250, 241, 232));
                 }else{
                     button.setBackground(new Color(183, 123, 79));
                 }
@@ -94,7 +94,7 @@ public class GameOverlay extends JPanel{
 					}
 					@Override
 					public void mousePressed(MouseEvent e) {
-						UIManager.put("Button.select", (((button.getBoardCoordinates())[0]+(button.getBoardCoordinates())[1])%2 == 0) ? new Color(243, 234, 226):new Color(183, 123, 79));
+						UIManager.put("Button.select", (((button.getBoardCoordinates())[0]+(button.getBoardCoordinates())[1])%2 == 0) ? new Color(250, 241, 232):new Color(183, 123, 79));
 					}
 					@Override
 					public void mouseReleased(MouseEvent e) {
@@ -125,7 +125,7 @@ public class GameOverlay extends JPanel{
         add(playingField);
         
         int takenPiecesWidth = (((int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0))*50 > 50*10) ? 500: ((int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0))*50;
-        int takenPiecesHeight = (int)((Math.ceil(15.0/(int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0)))*50);
+        int takenPiecesHeight = (int)(Math.ceil(15.0/(int)((game.getWidth()-10-(playingField.getX()+playingField.getWidth()+10))/50.0)))*50;
         
         piecesWhite = new JPanel();
         piecesWhite.setBounds(playingField.getX()+playingField.getWidth()+10, playingField.getY()+playingField.getHeight()-takenPiecesHeight, takenPiecesWidth, takenPiecesHeight);
@@ -190,7 +190,7 @@ public class GameOverlay extends JPanel{
                 
                 for(int i = 0; i<currentMoveOptions.size();i++){
                     if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
-                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
+                        board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(250, 241, 232));
                     }
                     else{
                         board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
@@ -213,7 +213,7 @@ public class GameOverlay extends JPanel{
                    ((gamestate == Constants.BLACK_TO_MOVE || gamestate == Constants.BLACK_TO_SELECT) && logic.getBoard()[y][x].getColour() == Constants.Color_BLACK)){
                     for(int i = 0; i<currentMoveOptions.size();i++){
                         if((currentMoveOptions.get(i)[0] + currentMoveOptions.get(i)[1])%2 == 0){
-                            board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(243, 234, 226));
+                            board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(250, 241, 232));
                         }
                         else{
                             board[currentMoveOptions.get(i)[1]][currentMoveOptions.get(i)[0]].setBackground(new Color(183, 123, 79));
