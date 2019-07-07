@@ -622,30 +622,36 @@ public class GameLogic {
         boolean[][] possibleMovement = new boolean[boardlength][boardlength];
         int xDirection = (int) Math.signum(x-xk), yDirection = (int) Math.signum(y-yk);
         boolean pin = true;
-        ArrayList<Integer[]> pinRestrictions = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> pinRestrictionsPrePiece = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> pinRestrictionsPostPiece = new ArrayList<Integer[]>();
         
         if(xDirection != 0 || yDirection != 0){
             if(Math.abs(x-xk) == Math.abs(y-yk) || x==xk || y==yk){
                 for (int i = 1; i < Math.abs(x-xk) || i < Math.abs(y-yk); i++) {
+                    pinRestrictionsPrePiece.add(new Integer[]{xk+(i*xDirection), yk + (i*yDirection)});
                     if(board[yk+(i*yDirection)][xk+(i*xDirection)] != null){
                         pin = false;
                     }
                 }
                 if(pin){
                     for(int i = 1; isInBounds(x+(i*xDirection), y+(i*yDirection)) && board[y+(i*yDirection)][x+(i*xDirection)] == null; i++){
-                        pinRestrictions.add(new Integer[]{x+(i*xDirection), y+(i*yDirection)});
+                        pinRestrictionsPostPiece.add(new Integer[]{x+(i*xDirection), y+(i*yDirection)});
                     }
                     
-                    int xPinPiece = x+((pinRestrictions.size()+1)*xDirection);
-                    int yPinPiece = y+((pinRestrictions.size()+1)*yDirection);
+                    int xPinPiece = x+((pinRestrictionsPostPiece.size()+1)*xDirection);
+                    int yPinPiece = y+((pinRestrictionsPostPiece.size()+1)*yDirection);
                     
                     if(isInBounds(xPinPiece, yPinPiece)){
                         if((((x==xk || y==yk) && board[yPinPiece][xPinPiece].getType() == Constants.ROOK) ||
                              (Math.abs(x-xk) == Math.abs(y-yk) && board[yPinPiece][xPinPiece].getType() == Constants.BISHOP)||
                               (board[yPinPiece][xPinPiece].getType() == Constants.QUEEN))&&board[yPinPiece][xPinPiece].getColour() != board[y][x].getColour()){
-                                pinRestrictions.add(new Integer[]{xPinPiece, yPinPiece});
-                                for (int i = 0; i < pinRestrictions.size(); i++) {
-                                    possibleMovement[pinRestrictions.get(i)[1]][pinRestrictions.get(i)[0]] = true;
+                                pinRestrictionsPostPiece.add(new Integer[]{xPinPiece, yPinPiece});
+                                for (int i = 0; i < pinRestrictionsPrePiece.size(); i++) {
+                                    pinRestrictionsPostPiece.add(pinRestrictionsPrePiece.get(i));
+                                }
+                                
+                                for (int i = 0; i < pinRestrictionsPostPiece.size(); i++) {
+                                    possibleMovement[pinRestrictionsPostPiece.get(i)[1]][pinRestrictionsPostPiece.get(i)[0]] = true;
                                 }
                                 return possibleMovement;
                         }
